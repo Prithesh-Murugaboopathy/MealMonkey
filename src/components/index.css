@@ -1,0 +1,140 @@
+/* Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(5px);
+  display: flex; justify-content: center; align-items: center;
+  z-index: 1000;
+  opacity: 0;
+  animation: fadeIn 0.3s forwards;
+}
+
+/* Desktop modal content */
+.modal-content {
+  background: white;
+  border-radius: 15px;
+  padding: 20px;
+  width: 400px;
+  max-height: 90vh;
+  overflow-y: auto;
+  transform: translateY(50px);
+  opacity: 0;
+}
+
+/* Animations */
+.modal-content.slide-up {
+  animation: slideUp 0.4s forwards;
+}
+
+.modal-content.slide-down {
+  animation: slideDown 0.4s forwards;
+}
+
+@keyframes slideUp {
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes slideDown {
+  to { transform: translateY(50px); opacity: 0; }
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+  to { opacity: 0; }
+}
+
+/* Close button */
+.close_btn {
+  position: absolute; top: 10px; right: 10px;
+  background: transparent; border: none; cursor: pointer; font-size: 18px;
+}
+
+/* Mobile / bottom sheet */
+@media (max-width: 768px) {
+  .modal-overlay {
+    align-items: flex-end;
+  }
+  .modal-content {
+    width: 100%;
+    border-radius: 15px 15px 0 0;
+    max-height: 80vh;
+    transform: translateY(100%);
+  }
+  .modal-content.slide-up {
+    animation: bottomSheetUp 0.4s forwards;
+  }
+  .modal-content.slide-down {
+    animation: bottomSheetDown 0.4s forwards;
+  }
+}
+
+@keyframes bottomSheetUp {
+  to { transform: translateY(0); opacity: 1; }
+}
+@keyframes bottomSheetDown {
+  to { transform: translateY(100%); opacity: 0; }
+}
+
+/* Sticky cart button - actually fixed */
+.sticky-cart-btn {
+  position: fixed; /* fix to viewport */
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #22c55e;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 50px;
+  box-shadow: 0 10px 15px rgba(0,0,0,0.3);
+  z-index: 9999; /* make sure it's on top */
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.sticky-cart-btn:hover {
+  transform: translateX(-50%) scale(1.05);
+}
+
+/* Cart modal overlay */
+.cart-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.4);
+  backdrop-filter: blur(6px);
+  display: flex;
+  justify-content: center;
+  align-items: center; /* default center for desktop */
+  z-index: 1000;
+}
+
+/* Mobile bottom sheet style */
+@media (max-width: 768px) {
+  .cart-modal-overlay {
+    align-items: flex-end; /* slide from bottom */
+  }
+
+  .cart-modal-content {
+    width: 100%;
+    border-radius: 12px 12px 0 0;
+  }
+}
+
+/* Cart modal content */
+.cart-modal-content {
+  width: 100%;
+  max-width: 500px;
+  background-color: white;
+  border-radius: 12px;
+  padding: 20px;
+  transform: translateY(50px); /* initial offset for animation */
+  transition: all 0.3s ease;
+}
+
+

@@ -1,0 +1,240 @@
+/* --- Search Button --- */
+.search-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: #4d966d;
+  color: white;
+  border-radius: 30px;
+  padding:10px 25px 10px 20px;
+  align-items: center;
+  cursor: pointer;
+  font-weight: 500;
+  transition: 0.3s ease;
+  z-index: 1;
+  width: fit-content;
+  margin-top: 20px;
+  /* height: 20px; */
+  font-family: "Calibri", sans-serif;
+  font-weight: 600;
+  box-shadow: 3px 5px 10px 10px #88fdc725;
+}
+.search-button:hover {
+  transform: scale(1.02);
+}
+
+/* --- Overlay --- */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(4px);
+  opacity: 0;
+  visibility: hidden;
+  transition: 0.3s ease;
+  z-index: 9;
+}
+.overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* --- Modal (Search Box) --- */
+.search-modal {
+  position: fixed;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.8);
+  width: 60%;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(30px);
+  border-radius: 20px;
+  padding: 20px 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  opacity: 0;
+  transition: all 0.5s cubic-bezier(0.3, 0.7, 0.4, 1.2);
+  z-index: 10;
+  pointer-events: none;
+}
+.search-modal.show {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+  pointer-events: all;
+}
+
+.search-input {
+  width: 100%;
+  border: none;
+  outline: none;
+  flex: 0.75;
+  background-color: transparent;
+  color: #fff;
+  font-size: 1.2rem;
+}
+
+
+/* --- Result Cards --- */
+.result-card {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px);
+  margin-bottom: 10px;
+  border-radius: 20px;
+  padding: 10px;
+  transition: 0.3s ease;
+  cursor: pointer;
+}
+.result-card:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+.result-img {
+  width: 50px;
+  height: 50px;
+  border-radius: 10px;
+  margin-right: 15px;
+  object-fit: cover;
+}
+.result-info h2 {
+  font-size: 1rem;
+  margin: 0;
+  color: #fff;
+}
+.result-info p {
+  color: #fff;
+  font-size: 0.9rem;
+  margin: 0;
+}
+.slide-up {
+  opacity: 0;
+  transform: translateY(40px);
+  animation: slideUp 0.7s ease-out forwards;
+}
+
+@keyframes slideUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+/* RESULTS CONTAINER */
+.results-container {
+  position: relative;
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 10px;
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+  z-index: 9;
+  margin-top: 20px;
+  animation: slideUpContainer 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+.results-container.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* make each card animate individually */
+.result-card {
+  display: flex;
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(8px);
+  border-radius: 12px;
+  padding: 10px;
+  cursor: pointer;
+  opacity: 0;
+  max-width: 512px;
+  margin-left: 25px;
+  font-family: "Calibri", sans-serif;
+  /* margin-right:0px; */
+  transform: translateY(20px);
+  animation: slideUpCard 0.4s ease forwards;
+}
+
+.result-card:nth-child(1) { animation-delay: 0.05s; }
+.result-card:nth-child(2) { animation-delay: 0.1s; }
+.result-card:nth-child(3) { animation-delay: 0.15s; }
+.result-card:nth-child(4) { animation-delay: 0.2s; }
+.result-card:nth-child(5) { animation-delay: 0.25s; }
+
+@keyframes slideUpCard {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUpContainer {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.result-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+}
+
+.result-img {
+  width: 80px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-right: 10px;
+}
+
+.result-info h2 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.result-info p {
+  margin: 0;
+  font-size: 12px;
+}
+
+.no-results {
+  text-align: center;
+  font-size: 14px;
+  color: #fff;
+  opacity: 0;
+  animation: fadeIn 0.4s ease forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.top{
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+.search_fnc{
+  display: flex;
+  flex: 1;
+  align-items: center;
+  color: #fff !important;
+}
+.top > button{
+  background-color: transparent;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
