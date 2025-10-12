@@ -1,0 +1,40 @@
+.restaurants_page{
+    margin-top: 100px;
+    padding: 30px 0 0 150px;
+}
+.search_bar{
+    width: 50%;
+    border: 1px solid#ccc;
+    border-radius: 10px;
+    padding: 10px;
+}
+.restaurants_grp{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+}
+.image_container{
+    width: 400px;      /* your desired square size */
+    height: 150px;
+    display: flex;
+    text-align: center !important;
+}
+.rest_image{
+  width: 400px;
+  height: 200px;
+  box-shadow: 1px 1px 10px 10px #00000004;
+  border-radius: 10px;
+  object-fit: cover;      /* fills the container while maintaining aspect ratio */
+  object-position: center; /* crops from center */
+}
+.restaurant_card{
+    width: 300px;
+    cursor: pointer;
+}
+.restaurant_name_in_page{
+    margin-top: 60px;
+    font-family: "Ranille", sans-serif;
+    letter-spacing: 1px;
+}
+.rest_status{
+    font-family: "Calibri", sans-serif;
+}

@@ -1,0 +1,53 @@
+.menu_page{
+    margin-top: 100px;
+    padding: 30px 0 0 150px;
+}
+.page_title{
+    font-family: "Ranille", sans-serif;
+    letter-spacing: 2px;
+    font-size: 40px;
+    font-weight: 500;
+    color: #ff5725;
+}
+.filter_opt{
+    display: flex;
+    width: 90%;
+    justify-content: space-between;
+    align-items: center;
+}
+.search_bar{
+    width: 70%;
+    border: 1px solid#ccc;
+    border-radius: 10px;
+    padding: 10px;
+}
+.option{
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 10px;
+}
+.menu_items{
+    margin-top: 30px;
+    padding: 30px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+    gap: 20px; /* space between items */
+    cursor: pointer;
+}
+.menu{
+    width: 350px;
+    padding: 20px;
+    text-align: center;
+}
+.bottom_part{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: -20px;
+    color: #5e5d5d;
+    font-family: "calibri", sans-serif;
+}
+.restaurant_name{
+    text-align: left;
+    font-family: "Ranille", sans-serif;
+}

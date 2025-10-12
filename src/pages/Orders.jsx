@@ -1,16 +1,20 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import './index.css'
+import OrderModal from "../components/OrderModal";
+import "./index.css";
+import "./css/Orders.css";
 
 export default function Orders() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedOrder, setSelectedOrder] = useState(null);
 
   useEffect(() => {
     const fetchOrders = async () => {
       try {
         const res = await axios.get("http://localhost:5000/orders", { withCredentials: true });
         setOrders(res.data);
+        console.log("DEBUG /orders response:", res.data);
       } catch (err) {
         console.error(err);
       } finally {
@@ -24,32 +28,31 @@ export default function Orders() {
   if (orders.length === 0) return <p>No orders placed yet!</p>;
 
   return (
-    <div className="p-4">
-      <h1>Orders</h1>
-      
-      <div className="space-y-6">
-        {orders.map(order => (
-          <div key={order.order_id}>
-            <h2 className="font-semibold mb-2">Order</h2>
+    <div className="orders_page">
+      <h1 className="page_title">Orders</h1>
+
+      <div className="orders_display">
+        {orders.map((order) => (
+          <div key={order.order_id} className="order_card">
+            <p>{order.restaurant_name.length > 25 
+                ? order.restaurant_name.slice(0, 25) + "..." 
+                : order.restaurant_name}</p>
             <p>Status: <span className="font-bold">{order.order_status || "Pending"}</span></p>
             <p>Total: ₹{order.total_price || order.total_amount}</p>
 
-            <div className="mt-2">
-              <h3 className="font-semibold mb-1">Items:</h3>
-              <div className="space-y-2">
-                {order.items.map(item => (
-                  <div key={item.food_id} className="flex items-center space-x-4">
-                    <div>
-                      <p>{item.name}</p>
-                      <p>₹{item.price} x {item.quantity} = ₹{item.price * item.quantity}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
+            <button
+              className="view"
+              onClick={() => setSelectedOrder(order)}
+            >
+              View Items
+            </button>
           </div>
         ))}
       </div>
+
+      {selectedOrder && (
+        <OrderModal order={selectedOrder} onClose={() => setSelectedOrder(null)} />
+      )}
     </div>
   );
 }

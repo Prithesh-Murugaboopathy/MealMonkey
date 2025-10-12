@@ -2,6 +2,10 @@ import axios from "axios";
 import React, { useState, useEffect, useContext } from "react";
 import { Flip, toast, ToastContainer } from "react-toastify";
 import { CartContext } from "../context/CartContext";
+import './css/MenuModal.css'
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
+import RemoveRoundedIcon from '@mui/icons-material/RemoveRounded';
+import AddRoundedIcon from '@mui/icons-material/AddRounded';
 
 export default function MenuModal({ restaurant, food, onClose }) {
   const { cart, addToCart, updateCart, clearCart } = useContext(CartContext);
@@ -101,30 +105,36 @@ export default function MenuModal({ restaurant, food, onClose }) {
   if (!food) return null;
 
   return (
-    <div className="modal-overlay" style={{ backdropFilter: "blur(6px)", backgroundColor: "rgba(0,0,0,0.4)" }}>
+    <div className="modal-overlay" onClick={handleClose} style={{ backdropFilter: "blur(6px)", backgroundColor: "rgba(0,0,0,0.4)" }}>
       <ToastContainer autoClose={false} position="bottom-right" transition={Flip} closeButton={false} stacked />
       <div className="modal-content" style={modalStyle} onClick={(e) => e.stopPropagation()}>
-        <button className="close_btn" onClick={handleClose}>✖</button>
-        <h2 className="text-2xl font-bold mb-4">{restaurant.name}</h2>
-
-        <div className="flex flex-col items-center">
-          <img src={food.image_url || "/food-placeholder.png"} alt={food.name} className="h-48 w-full object-cover rounded mb-4" />
-          <h3 className="font-semibold text-xl">{food.name}</h3>
-          <p className="text-sm text-gray-600 mb-2">{food.description}</p>
-          <p className="font-bold text-lg mb-4">₹{food.price}</p>
-
-          {quantity === 0 ? (
-            <button className="bg-green-500 text-white rounded px-4 py-2" onClick={handleAdd} disabled={loading}>
-              {loading ? "Adding..." : "Add"}
-            </button>
-          ) : (
-            <div className="flex items-center space-x-2">
-              <button className="bg-red-500 text-white px-3 py-1 rounded" onClick={() => handleUpdate(quantity - 1)} disabled={loading}>-</button>
-              <span className="px-3 py-1 border rounded">{quantity}</span>
-              <button className="bg-green-500 text-white px-3 py-1 rounded" onClick={() => handleUpdate(quantity + 1)} disabled={loading}>+</button>
+        <button className="close_btn" onClick={handleClose}><CloseRoundedIcon /></button>
+        <div className="">
+          <img src={food.image_url || "/food-placeholder.png"} alt={food.name} className="food_image" />
+          <div className="details">
+            <div className="left_side">
+              <h3 className="food_modal_name">
+                {food.name.length > 25 
+                ? food.name.slice(0, 20) + "..." 
+                : food.name}
+              </h3>
+              <p className="food_modal_price">₹ {food.price}</p>
             </div>
-          )}
+            {quantity === 0 ? (
+              <button className="food_modal_add_to_cart" onClick={handleAdd} disabled={loading}>
+                {loading ? "Adding..." : "ADD"}
+              </button>
+            ) : (
+              <div className="customizable_qty">
+                <button className="left_minus_btn" onClick={() => handleUpdate(quantity - 1)} disabled={loading}><RemoveRoundedIcon /></button>
+                <span className="food_modal_qty">{quantity}</span>
+                <button className="right_plus_btn" onClick={() => handleUpdate(quantity + 1)} disabled={loading}><AddRoundedIcon /></button>
+              </div>
+            )}
+          </div>
+          <p className="food_modal_desc">{food.description}</p>
         </div>
+        
       </div>
     </div>
   );

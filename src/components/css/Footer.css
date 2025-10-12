@@ -1,0 +1,8 @@
+.footer{
+    height: 730px;
+    background-image: url('../../../public/footer.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 100%;
+    padding-right: 500px;
+}

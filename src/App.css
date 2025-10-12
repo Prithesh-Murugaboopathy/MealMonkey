@@ -18,5 +18,8 @@ body{
     overflow-x: hidden;
     margin: 0;
     padding: 0;
-    /* overflow-y: hidden; */
+}
+*{
+    transition-duration: 0.4s;
+    text-decoration: none !important;
 }

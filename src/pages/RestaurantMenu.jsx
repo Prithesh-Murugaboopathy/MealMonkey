@@ -2,6 +2,8 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import MenuModal from "../components/MenuModal";
+import "./index.css";
+import './css/RestaurantMenu.css'
 
 export default function RestaurantMenu({setCartItems}) {
   const { id } = useParams();
@@ -33,22 +35,30 @@ export default function RestaurantMenu({setCartItems}) {
   if (loading) return <p className="p-4">Loading...</p>;
 
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">{restaurant?.name}</h1>
+    <div className="rest_menu">
+      <h1 className="rest_name">{restaurant?.name}</h1>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div className="rest_menu_items">
         {menu.map((item) => (
           <div
             key={item.food_id}
-            className="border p-2 rounded cursor-pointer hover:shadow-lg"
+            className="rest_menu_item"
             onClick={() => {
               setSelectedFood(item);
               setModalOpen(true);
             }}
           >
-            <img src={item.image_url} alt={item.name} className="w-full h-32 object-cover rounded" />
-            <h2 className="font-semibold mt-2">{item.name}</h2>
-            <p>₹{item.price}</p>
+            <div className="image_square">
+              <img src={item.image_url} alt={item.name} className="image" />
+            </div>
+            <div className="desc">
+              <h2 className="rest_menu_item_name">
+                {item.name.length > 17 
+                ? item.name.slice(0, 17) + "..." 
+                : item.name}
+              </h2>
+              <p className="rest_menu_item_desc">₹{item.price}</p>
+            </div>
           </div>
         ))}
       </div>

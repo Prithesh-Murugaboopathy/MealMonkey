@@ -2,6 +2,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import './css/Restaurants.css'
+import './index.css'
 
 export default function Restaurants() {
   const navigate = useNavigate(); // <-- hook
@@ -61,15 +63,15 @@ const openRestaurantMenu = async (restaurant) => {
   
 
   return (
-    <div className="p-4">
-      <h1 className="text-3xl font-bold mb-4">Restaurants</h1>
+    <div className="restaurants_page">
+      <h1 className="page_title">Restaurants</h1>
       <div style={{ margin: "20px 0" }}>
         <input
           type="text"
           placeholder="Search Restaurants..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          style={{ marginRight: "10px" }}
+          className="search_bar"
         />
         
       </div>
@@ -77,20 +79,22 @@ const openRestaurantMenu = async (restaurant) => {
       {loading ? (
         <p>Loading...</p>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <div className="restaurants_grp">
             {filteredRestaurants.map((r) => (
               <div
                 key={r.restaurant_id}
-                className="border rounded shadow p-4 cursor-pointer hover:shadow-lg"
+                className="restaurant_card"
                 onClick={() => goToRestaurant(r)}
               >
-                <img
-                  src={r.image_url || "/placeholder.png"}
-                  alt={r.name}
-                  className="w-full h-32 object-cover rounded mb-2"
-                />
-                <h2 className="text-xl font-semibold">{r.name}</h2>
-                <p>Status: {r.shop_status ? "Open" : "Closed"}</p>
+                <div className="image_container">
+                  <img
+                    src={r.image_url}
+                    alt={r.name}
+                    className="rest_image"
+                  />
+                </div>
+                <h2 className="restaurant_name_in_page">{r.name}</h2>
+                <p className="rest_status">Status: {r.shop_status ? "Open" : "Closed"}</p>
               </div>
             ))}
 

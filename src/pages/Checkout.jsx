@@ -5,6 +5,9 @@ import { toast, ToastContainer, Flip } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import axios from "axios";
 import { useNavigate } from "react-router-dom"; // also needed for navigate
+import './css/Checkout.css'
+import RemoveRoundedIcon from '@mui/icons-material/RemoveRounded';
+import AddRoundedIcon from '@mui/icons-material/AddRounded';
 
 
 export default function Checkout() {
@@ -33,44 +36,59 @@ export default function Checkout() {
   };
 
   return (
-    <div className="p-4">
-      <ToastContainer autoClose={3000} position="bottom-right" transition={Flip} />
-      <h1 className="text-3xl font-bold mb-4">Checkout</h1>
+    <div className="checkout_display">
+      <div className="checkout_page">
+        <ToastContainer autoClose={3000} position="bottom-right" transition={Flip} />
+        <h1 className="checkout_page_title">Checkout</h1>
 
-      {cart.length === 0 ? (
-        <p>Your cart is empty!</p>
-      ) : (
-        <div className="space-y-4">
-          {cart.map(item => (
-            <div key={item.food_id} className="flex items-center justify-between border p-2 rounded">
-              <div className="flex items-center space-x-4">
-                <img src={item.image_url || "/food-placeholder.png"} alt={item.name} className="w-16 h-16 object-cover rounded"/>
-                <div>
-                  <h3 className="font-semibold">{item.name}</h3>
-                  <p>₹{item.price} x {item.quantity} = ₹{item.price * item.quantity}</p>
+        {cart.length === 0 ? (
+          <p>Your cart is empty!</p>
+        ) : (
+          <div className="checkout_card">
+            {cart.map(item => (
+              <div key={item.food_id} className="checkout_items">
+                <div className="flex items-center space-x-4">
+                  <div>
+                    <h3 className="font-semibold">{item.name.length > 20
+                      ? item.name.slice(0, 20) + "..." 
+                      : item.name}
+                    </h3>
+                  </div>
                 </div>
+                <div className="cart_customizable_qty">
+                <button 
+                  className="cart_left_minus_btn" 
+                  onClick={() =>
+                    item.quantity - 1 <= 0
+                      ? removeFromCart(item.food_id)
+                      : updateCart(item.food_id, item.quantity - 1)
+                  }>
+                    <RemoveRoundedIcon />
+                  </button>
+                <span className="cart_modal_qty">{item.quantity}</span>
+                <button className="cart_right_plus_btn" onClick={() => updateCart(item.food_id, item.quantity + 1)}><AddRoundedIcon /></button>
+                &nbsp;
+                &nbsp;
+                &nbsp;
+                <p>₹{item.price * item.quantity}</p>
               </div>
-              <div className="flex items-center space-x-2">
-                <button className="bg-red-500 text-white px-2 py-1 rounded" onClick={() => updateCart(item.food_id, item.quantity - 1)}>-</button>
-                <span>{item.quantity}</span>
-                <button className="bg-green-500 text-white px-2 py-1 rounded" onClick={() => updateCart(item.food_id, item.quantity + 1)}>+</button>
-                <button className="bg-gray-500 text-white px-2 py-1 rounded" onClick={() => removeFromCart(item.food_id)}>Remove</button>
               </div>
+            ))}
+            <div className="total">
+              <h2 className="total_cost">To Pay &nbsp;₹{totalAmount}</h2>
             </div>
-          ))}
-
-          <div className="flex justify-between items-center mt-4 border-t pt-4">
-            <h2 className="text-xl font-bold">Total: ₹{totalAmount}</h2>
-            <button
-              className={`bg-blue-500 text-white px-4 py-2 rounded ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
-              onClick={handleCheckout}
-              disabled={loading}
-            >
-              {loading ? "Processing..." : "Place Order"}
-            </button>
+            <div className="place">
+              <button
+                className={`place_order ${loading ? "processing_style" : ""}`}
+                onClick={handleCheckout}
+                disabled={loading}
+              >
+                {loading ? "Processing..." : "Proceed to Payment"}
+              </button>
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }

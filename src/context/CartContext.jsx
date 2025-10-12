@@ -6,47 +6,36 @@ export const CartContext = createContext();
 export function CartProvider({ children }) {
   const [cart, setCart] = useState([]);
 
-  // Fetch initial cart from backend
-  useEffect(() => {
-    async function fetchCart() {
-      try {
-        const res = await axios.get("http://localhost:5000/cart", { withCredentials: true });
-        setCart(res.data.items || []);
-      } catch (err) {
-        console.log("Error fetching cart:", err);
-      }
+  const fetchCart = async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/cart", { withCredentials: true });
+      setCart(res.data.items || []);
+    } catch (err) {
+      console.log("Error fetching cart:", err);
     }
+  };
+
+  useEffect(() => {
     fetchCart();
   }, []);
 
   const addToCart = async (food, quantity = 1) => {
     try {
-      const res = await axios.post(
+      await axios.post(
         "http://localhost:5000/cart/add",
         { food_id: food.food_id, quantity },
         { withCredentials: true }
       );
-      // update local cart state
-      setCart(prev => {
-        const existing = prev.find(i => i.food_id === food.food_id);
-        if (existing) {
-          return prev.map(i =>
-            i.food_id === food.food_id ? { ...i, quantity: i.quantity + quantity } : i
-          );
-        } else {
-          return [...prev, { ...food, quantity }];
-        }
-      });
-      return res.data;
+      await fetchCart(); // ⬅️ Refresh the latest data from backend
     } catch (err) {
-      throw err; // so frontend toast can catch it
+      console.log("Add to cart failed:", err);
     }
   };
 
   const updateCart = async (food_id, quantity) => {
     try {
       await axios.patch("http://localhost:5000/cart/update", { food_id, quantity }, { withCredentials: true });
-      setCart(prev => prev.map(i => i.food_id === food_id ? { ...i, quantity } : i));
+      await fetchCart(); // ⬅️ Refresh again
     } catch (err) {
       console.log("Failed to update cart", err);
     }
@@ -55,7 +44,7 @@ export function CartProvider({ children }) {
   const removeFromCart = async (food_id) => {
     try {
       await axios.delete(`http://localhost:5000/cart/remove/${food_id}`, { withCredentials: true });
-      setCart(prev => prev.filter(i => i.food_id !== food_id));
+      await fetchCart(); // ⬅️ Refresh again
     } catch (err) {
       console.log("Failed to remove item", err);
     }
@@ -71,7 +60,7 @@ export function CartProvider({ children }) {
   };
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, updateCart, removeFromCart, clearCart }}>
+    <CartContext.Provider value={{ cart, addToCart, updateCart, removeFromCart, clearCart, fetchCart }}>
       {children}
     </CartContext.Provider>
   );

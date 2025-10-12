@@ -4,11 +4,7 @@
   width: 150px;      /* your desired square size */
   height: 150px;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-  border-radius: 8px; /* optional */
-  background: #f0f0f0; /* optional placeholder color */
+  text-align: center !important;
 }
 
 .image-square img {
@@ -23,4 +19,14 @@
     font-weight: 50;
     font-style: normal;
     letter-spacing: 1px;
+}
+.image{
+  width: 350px;
+  height: 200px;
+  box-shadow: 1px 1px 10px 10px #00000004;
+  border-radius: 10px;
+  min-width: 100%;
+  min-height: 100%;
+  object-fit: cover;      /* fills the container while maintaining aspect ratio */
+  object-position: center; /* crops from center */
 }

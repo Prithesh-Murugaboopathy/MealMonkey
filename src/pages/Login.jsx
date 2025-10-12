@@ -1,5 +1,9 @@
 import { useState } from "react";
 import API from "../api/api";
+import './css/Login.css'
+import MailOutlineOutlinedIcon from '@mui/icons-material/MailOutlineOutlined';
+import LockOpenOutlinedIcon from '@mui/icons-material/LockOpenOutlined';
+import CircleRoundedIcon from '@mui/icons-material/CircleRounded';
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -22,10 +26,22 @@ export default function Login() {
   };
 
   return (
-    <form onSubmit={handleLogin} style={{ display: "flex", flexDirection: "column", width: "300px", margin: "50px auto" }}>
-      <input placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} required style={{ marginBottom: "10px", padding: "8px" }} />
-      <input placeholder="Password" type="password" value={password} onChange={e => setPassword(e.target.value)} required style={{ marginBottom: "10px", padding: "8px" }} />
-      <button type="submit" style={{ padding: "10px", cursor: "pointer" }}>Login</button>
+    <form onSubmit={handleLogin} className="login_form">
+      <div className="email_input">
+        Email Address
+        <div className="bottom">
+          <MailOutlineOutlinedIcon />  
+          <input placeholder="example@gmail.com" value={email} onChange={e => setEmail(e.target.value)} required />
+        </div>
+      </div>
+      <div className="password_input">
+        Password
+        <div className="bottom">
+          <LockOpenOutlinedIcon />
+          <input placeholder="●●●●" type="password" value={password} onChange={e => setPassword(e.target.value)} required />
+        </div>
+      </div>
+      <button type="submit" className="login_processor">Login</button>
     </form>
   );
 }

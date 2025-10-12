@@ -1,5 +1,8 @@
 import { useState } from "react";
 import API from "../api/api";
+import './css/Register.css'
+import MailOutlineOutlinedIcon from '@mui/icons-material/MailOutlineOutlined';
+import LockOpenOutlinedIcon from '@mui/icons-material/LockOpenOutlined';
 
 export default function UserRegister() {
     const [name, setName] = useState("");
@@ -25,12 +28,36 @@ export default function UserRegister() {
     };
 
     return (
-        <form onSubmit={handleRegister} style={{ display: "flex", flexDirection: "column", width: "300px", margin: "50px auto" }}>
-            <input placeholder="Name" value={name} onChange={e => setName(e.target.value)} required style={{ marginBottom: "10px", padding: "8px" }} />
-            <input placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} required style={{ marginBottom: "10px", padding: "8px" }} />
-            <input placeholder="Phone" value={phone} onChange={e => setPhone(e.target.value)} required style={{ marginBottom: "10px", padding: "8px" }} />
-            <input placeholder="Password" type="password" value={password} onChange={e => setPassword(e.target.value)} required style={{ marginBottom: "10px", padding: "8px" }} />
-            <button type="submit" style={{ padding: "10px", cursor: "pointer" }}>Register</button>
+        <form onSubmit={handleRegister} className="register_form">
+            <div className="text_input">
+                Email Address
+                <div className="bottom">
+                    <MailOutlineOutlinedIcon />
+                    <input placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} required />
+                </div>
+            </div>
+            <div className="password_input">
+                Password
+                <div className="bottom">
+                    <LockOpenOutlinedIcon />
+                    <input placeholder="●●●●" type="password" value={password} onChange={e => setPassword(e.target.value)} required />
+                </div>
+            </div>
+            <div className="text_input">
+                Name
+                <div className="bottom">
+                    <LockOpenOutlinedIcon />
+                    <input placeholder="Name" value={name} onChange={e => setName(e.target.value)} required />
+                </div>
+            </div>
+            <div className="text_input">
+                Phone Number
+                <div className="bottom">
+                    <LockOpenOutlinedIcon />
+                    <input placeholder="Phone" value={phone} onChange={e => setPhone(e.target.value)} required />
+                </div>
+            </div>
+            <button type="submit" className="login_processor">Register</button>
         </form>
     );
 }

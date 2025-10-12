@@ -1,0 +1,102 @@
+.food_image{
+    margin-top: -50px;
+    object-fit: cover;      /* fills the container while maintaining aspect ratio */
+    object-position: center; /* crops from center */
+    width: 550px;
+    height: 400px;
+}
+.details{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px 0 20px;
+}
+.food_modal_name{
+    font-size: 25px;
+    font-family: "Ranille", sans-serif;
+}
+.food_modal_price{
+    font-family: "Calibri", sans-serif;
+    font-size: 19px;
+    margin-top: -10px;
+    font-weight: 600;
+    color: #060d14;
+}
+.food_modal_add_to_cart{
+    padding: 15px;
+    width: 120px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #fff;
+    color: #20a875;
+    font-weight: bolder;
+    font-size: 20px;
+    font-family: 'Calibri', sans-serif;
+    cursor: pointer;
+}
+.food_modal_desc{
+    padding: 0 20px 20px 20px;
+    font-family: 'calibri', sans-serif;
+    font-size: 18px;
+    line-height: 21px;
+}
+.close_btn{
+    position: absolute;  /* place it relative to modal-content */
+    top: 15px;           /* distance from top of modal */
+    right: 15px;         /* distance from right of modal */
+    width: 30px;
+    height: 30px;
+    background-color: #fff;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;         /* makes sure it’s above the image */
+    cursor: pointer;
+}
+.customizable_qty{
+    display: flex;
+    font-family: "Calibri", sans-serif;
+    color: #20a875 !important;
+}
+.left_minus_btn{
+    padding: 5px 10px 5px 10px;
+    font-size: 5px !important;
+    background-color: #fff;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border: 1px solid #d9dadb;
+    color: #20a875 !important;
+    font-weight: bolder;
+    border-top: 1px solid #d9dadb;
+    border-left: 1px solid #d9dadb;
+    border-bottom: 1px solid #d9dadb;
+    border-right: none;
+    cursor: pointer;
+    transition-duration: 0.5s;
+}
+.right_plus_btn{
+    padding: 5px 10px 5px 10px;
+    font-size: 5px !important;
+    background-color: #fff;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-top: 1px solid #d9dadb;
+    border-right: 1px solid #d9dadb;
+    border-bottom: 1px solid #d9dadb;
+    border-left: none;
+    color: #20a875 !important;
+    font-weight: bolder;
+    cursor: pointer;
+    transition-duration: 0.5s;
+}
+.left_minus_btn:hover, .right_plus_btn:hover{
+    background-color: #f3f1f1;
+}
+.food_modal_qty{
+    border-top: 1px solid #d9dadb;
+    border-bottom: 1px solid #d9dadb;
+    padding: 10px;
+    font-weight: bolder;
+    font-size: 23px;
+}

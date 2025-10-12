@@ -6,6 +6,7 @@ import TwoWheelerRoundedIcon from '@mui/icons-material/TwoWheelerRounded';
 import ShoppingBagRoundedIcon from '@mui/icons-material/ShoppingBagRounded';
 import RestaurantRoundedIcon from '@mui/icons-material/RestaurantRounded';
 import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded';
+import CopyrightRoundedIcon from '@mui/icons-material/CopyrightRounded';
 import { Link } from "react-router-dom";
 
 export default function Home() {
@@ -112,7 +113,22 @@ export default function Home() {
                 </div>
             </div>
             <div className="footer">
-                
+                <div className="height">
+
+                </div>
+                <div className="content_container">
+                    <div className="restaurants_and_food">
+                        Enjoy <span>3000+</span> Foods from <br /><span>400</span> Restaurants
+                    </div>
+                    <div className="acutal_footer">
+                        <div className="logo">Meal Monkey<span style={{ color: "#f75326" }}>.</span></div>
+                        <div className="copy_rights">
+                            <CopyrightRoundedIcon />
+                            &nbsp;
+                            2025 Prithesh Murugaboopathy | All rights reserved
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     );

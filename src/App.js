@@ -20,6 +20,7 @@ import Menu from "./pages/Menu";
 
 import './App.css'
 import SearchBar from "./components/SearchBar";
+import Footer from "./components/Footer";
 
 function App() {
   const [cartItems, setCartItems] = useState([]);
