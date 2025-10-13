@@ -24,8 +24,15 @@ export default function Orders() {
     fetchOrders();
   }, []);
 
-  if (loading) return <p>Loading orders...</p>;
-  if (orders.length === 0) return <p>No orders placed yet!</p>;
+  if (loading) return (
+    <div className="replace_data">
+      Loading orders...
+    </div>)
+  if (orders.length === 0) return (
+      <div className="replace_data">
+        No orders placed yet!
+      </div>
+    );
 
   return (
     <div className="orders_page">

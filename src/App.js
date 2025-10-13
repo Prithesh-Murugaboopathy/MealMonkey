@@ -52,7 +52,7 @@ function App() {
           <Route path="/restaurant_register" element={<RestaurantRegister />} />
           <Route path="/menu" element={<Menu />} />.
           <Route path="/restaurant_login" element={<RestaurantLogin />} />
-          <Route path="/restaurant_dashboard" element={<RestaurantDashboard />} />
+          <Route path="/restaurant_dashboard" element={<RestaurantDashboard setCartItems={setCartItems} />} />
           <Route path="/restaurants" element={<Restaurants />} />
           <Route path="/search" element={<SearchBar />} />
         </Routes>

@@ -33,7 +33,7 @@ export default function Menu() {
     fetchMenu();
   }, [search, vegFilter, priceOrder]);
 
-  if (loading) return <p>Loading menu...</p>;
+  if (loading) return <p className="replace_data">Loading menu...</p>;
 
   // 🧭 Function to navigate to restaurant page
   const goToRestaurant = (restaurantId) => {

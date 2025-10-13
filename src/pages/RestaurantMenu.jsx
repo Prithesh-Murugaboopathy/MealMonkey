@@ -32,7 +32,7 @@ export default function RestaurantMenu({setCartItems}) {
     fetchMenu();
   }, [id]);
 
-  if (loading) return <p className="p-4">Loading...</p>;
+  if (loading) return <p className="replace_data">Loading...</p>;
 
   return (
     <div className="rest_menu">

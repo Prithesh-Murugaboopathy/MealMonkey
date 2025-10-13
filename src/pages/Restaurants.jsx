@@ -77,7 +77,7 @@ const openRestaurantMenu = async (restaurant) => {
       </div>
 
       {loading ? (
-        <p>Loading...</p>
+        <p className="replace_data">Loading...</p>
       ) : (
         <div className="restaurants_grp">
             {filteredRestaurants.map((r) => (
@@ -101,38 +101,6 @@ const openRestaurantMenu = async (restaurant) => {
         </div>
         
       )}
-
-      {/* Menu Modal
-      {selectedRestaurant && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-start pt-20 z-50">
-          <div className="bg-white w-full max-w-3xl p-4 rounded shadow-lg overflow-y-auto max-h-[80vh]">
-            <button
-              className="mb-4 px-4 py-2 bg-red-500 text-white rounded"
-              onClick={() => setSelectedRestaurant(null)}
-            >
-              Close
-            </button>
-            <h2 className="text-2xl font-bold mb-4">{selectedRestaurant.name} Menu</h2>
-            {menuLoading ? (
-              <p>Loading menu...</p>
-            ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {menu.map((item) => (
-                  <div key={item.food_id} className="border rounded p-2 flex flex-col">
-                    <img src={item.image_url || "/food-placeholder.png"} alt={item.name} className="h-32 object-cover mb-2 rounded"/>
-                    <h3 className="font-semibold">{item.name}</h3>
-                    <p className="text-sm">{item.description}</p>
-                    <p className="font-bold">₹{item.price}</p>
-                    <button className="mt-auto bg-green-500 text-white rounded px-2 py-1">
-                      Add to Cart
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-      )} */}
     </div>
   );
 }

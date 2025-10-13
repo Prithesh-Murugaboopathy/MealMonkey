@@ -1,0 +1,14 @@
+.replace_data{
+    background-color: #232229;
+    width: fit-content;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: #fff;
+    font-family: "Ranille", sans-serif;
+    padding: 10px 10px 20px 10px;
+    font-size: 30px;
+    border-radius: 10px;
+}

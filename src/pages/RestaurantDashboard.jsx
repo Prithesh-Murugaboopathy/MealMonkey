@@ -2,8 +2,10 @@
 import React, { useState, useEffect } from "react";
 import EditFoodModal from "../components/EditFoodModal";
 import "../components/index.css";
+import './css/RestDashboard.css'
+import MenuModal from "../components/MenuModal";
 
-export default function RestaurantDashboard() {
+export default function RestaurantDashboard({setCartItems}) {
   const [menu, setMenu] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -13,6 +15,9 @@ export default function RestaurantDashboard() {
 
   const [restaurantImage, setRestaurantImage] = useState(null);
   const [restaurantImagePreview, setRestaurantImagePreview] = useState(null);
+  const [restaurant, setRestaurant] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedFood, setSelectedFood] = useState(null); // new state
 
   // 🔹 Add states for Add Food form
   const [name, setName] = useState("");
@@ -26,6 +31,7 @@ export default function RestaurantDashboard() {
   const [searchTerm, setSearchTerm] = useState("");
   const [vegFilter, setVegFilter] = useState("");
   const [priceOrder, setPriceOrder] = useState("asc");
+  
 
   useEffect(() => {
     const url = new URL("http://localhost:5000/restaurant_menu");
@@ -198,18 +204,23 @@ const handleUploadRestaurantImage = async () => {
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>Your Restaurant Menu</h2>
+    <div className="rest_dashboard">
+      <h2 className="page_title">Hey Restaurant Manager,</h2>
       <h3>Restaurant Profile Image</h3>
-      {restaurantImagePreview && (
-        <img
-          src={restaurantImagePreview}
-          alt="Restaurant"
-          style={{ width: "300px", height: "300px", borderRadius: "10px" }}
-        />
-      )}
-      <input type="file" accept="image/*" onChange={handleRestaurantImageChange} />
-  <button onClick={handleUploadRestaurantImage}>Upload Image</button>
+      <div className="image_div">
+        {restaurantImagePreview && (
+          <img
+            src={restaurantImagePreview}
+            alt="Restaurant"
+            className="rest_dashboard_image"
+          />
+        )}
+        <div className="sub_div">
+          <input type="file" accept="image/*" onChange={handleRestaurantImageChange} />
+          <button onClick={handleUploadRestaurantImage}>Upload Image</button>
+        </div>
+      </div>
+      
 
       <button
         onClick={handleRestaurantLogout}
@@ -311,19 +322,26 @@ const handleUploadRestaurantImage = async () => {
         </select>
       </div>
 
-      <ul>
+      <div className="rest_menu_items">
         {menu.map((item) => (
-          <li key={item.food_id} style={{ marginBottom: "15px" }}>
-            {item.image_url && (
-              <img
-                src={item.image_url}
-                alt={item.name}
-                style={{ width: "150px", height: "150px", objectFit: "cover" }}
-              />
-            )}
-            <div>
-              <strong>{item.name}</strong> - ₹{item.price} <br />
-              <em>{item.description}</em> | {item.meal_time} <br />
+          <div
+            key={item.food_id}
+            className="rest_menu_item"
+            onClick={() => {
+              setSelectedFood(item);
+              setModalOpen(true);
+            }}
+          >
+            <div className="image_square">
+              <img src={item.image_url} alt={item.name} className="image" />
+            </div>
+            <div className="desc">
+              <h2 className="rest_menu_item_name">
+                {item.name.length > 17 
+                ? item.name.slice(0, 17) + "..." 
+                : item.name}
+              </h2>
+              <p className="rest_menu_item_desc">₹{item.price}</p>
               <button onClick={() => handleEdit(item)}>Edit</button>
               <button onClick={() => handleDelete(item.food_id)}>Delete</button>
               <button
@@ -332,9 +350,19 @@ const handleUploadRestaurantImage = async () => {
                 {item.available ? "Mark Unavailable" : "Mark Available"}
               </button>
             </div>
-          </li>
+          </div>
         ))}
-      </ul>
+      </div>
+
+      {/* Modal */}
+      {modalOpen && selectedFood && (
+        <MenuModal
+          restaurant={restaurant}
+          food={selectedFood}      // pass only the clicked item
+          onClose={() => setModalOpen(false)}
+          setCartItems={setCartItems}
+        />
+      )}
 
       {editingItem && (
         <EditFoodModal
