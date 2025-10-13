@@ -20,6 +20,7 @@ import Menu from "./pages/Menu";
 
 import './App.css'
 import SearchBar from "./components/SearchBar";
+import API from "./api/api";
 
 function App() {
   // eslint-disable-next-line no-unused-vars
@@ -28,7 +29,7 @@ function App() {
   useEffect(() => {
     async function fetchCart() {
       try {
-        const res = await axios.get("http://localhost:5000/cart", { withCredentials: true });
+        const res = await API.get("/cart");
         setCartItems(res.data.items || []);
       } catch (err) {
         console.log("Error fetching cart");

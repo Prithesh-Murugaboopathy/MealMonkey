@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
+import API from "../api/api";
 
 const SearchBar = () => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -16,7 +17,8 @@ const SearchBar = () => {
 useEffect(() => {
     async function fetchRestaurants() {
       try {
-        const res = await axios.get("http://localhost:5000/restaurants");
+        const res = await API.get("/restaurants");
+
         setRestaurants(res.data);
       } catch (err) {
         console.error(err);
@@ -34,8 +36,10 @@ useEffect(() => {
   }, [isExpanded]);
 
   const filteredRestaurants = restaurants.filter((r) =>
-    r.name.toLowerCase().includes(searchTerm.toLowerCase())
+    r.name?.toLowerCase().includes(searchTerm?.toLowerCase() || "")
   );
+
+
 
   const goToRestaurant = (restaurant) => {
     navigate(`/restaurant/${restaurant.restaurant_id}`);

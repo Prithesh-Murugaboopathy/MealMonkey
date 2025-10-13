@@ -3,6 +3,7 @@ import axios from "axios";
 import OrderModal from "../components/OrderModal";
 import "./index.css";
 import "./css/Orders.css";
+import API from "../api/api";
 
 export default function Orders() {
   const [orders, setOrders] = useState([]);
@@ -12,7 +13,8 @@ export default function Orders() {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/orders", { withCredentials: true });
+        const res = await API.get("/orders");
+
         setOrders(res.data);
         console.log("DEBUG /orders response:", res.data);
       } catch (err) {

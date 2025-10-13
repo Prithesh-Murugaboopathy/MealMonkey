@@ -22,7 +22,7 @@ export default function Restaurants() {
   useEffect(() => {
     async function fetchRestaurants() {
       try {
-        const res = await axios.get("http://localhost:5000/restaurants");
+        const res = await axios.get("https://flaskapiformealmonkey.onrender.com/restaurants");
         setRestaurants(res.data);
       } catch (err) {
         console.error(err);

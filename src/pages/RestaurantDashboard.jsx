@@ -34,7 +34,7 @@ export default function RestaurantDashboard({setCartItems}) {
   
 
   useEffect(() => {
-    const url = new URL("http://localhost:5000/restaurant_menu");
+    const url = new URL("https://flaskapiformealmonkey.onrender.com/restaurant_menu");
     url.searchParams.append("search", searchTerm);
     url.searchParams.append("veg", vegFilter);
     url.searchParams.append("price_order", priceOrder);
@@ -45,7 +45,7 @@ export default function RestaurantDashboard({setCartItems}) {
   }, [searchTerm, vegFilter, priceOrder]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/get_restaurant_profile", { credentials: "include" })
+    fetch("https://flaskapiformealmonkey.onrender.com/get_restaurant_profile", { credentials: "include" })
       .then(res => res.json())
       .then(data => {
         if (data.image_url) setRestaurantImagePreview(data.image_url);
@@ -54,7 +54,7 @@ export default function RestaurantDashboard({setCartItems}) {
 
   const fetchMenu = () => {
     setLoading(true);
-    fetch("http://localhost:5000/restaurant_menu", { credentials: "include" })
+    fetch("https://flaskapiformealmonkey.onrender.com/restaurant_menu", { credentials: "include" })
       .then((res) => {
         if (!res.ok) throw new Error("Unauthorized or fetch failed");
         return res.json();
@@ -74,7 +74,7 @@ export default function RestaurantDashboard({setCartItems}) {
   }, []);
 
   useEffect(() => {
-    fetch("http://localhost:5000/get_shop_status", {
+    fetch("https://flaskapiformealmonkey.onrender.com/get_shop_status", {
       method: "GET",
       credentials: "include",
     })
@@ -91,7 +91,7 @@ export default function RestaurantDashboard({setCartItems}) {
   const handleDelete = async (menu_id) => {
     if (!window.confirm("Are you sure?")) return;
     try {
-      await fetch(`http://localhost:5000/delete_food/${menu_id}`, {
+      await fetch(`https://flaskapiformealmonkey.onrender.com/delete_food/${menu_id}`, {
         method: "DELETE",
         credentials: "include",
       });
@@ -103,7 +103,7 @@ export default function RestaurantDashboard({setCartItems}) {
 
   const toggleAvailability = async (menu_id, currentStatus) => {
     try {
-      await fetch(`http://localhost:5000/toggle_availability/${menu_id}`, {
+      await fetch(`https://flaskapiformealmonkey.onrender.com/toggle_availability/${menu_id}`, {
         method: "PATCH",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -127,7 +127,7 @@ export default function RestaurantDashboard({setCartItems}) {
     if (imageFile) formData.append("image", imageFile);
 
     try {
-      await fetch("http://localhost:5000/add_food", {
+      await fetch("https://flaskapiformealmonkey.onrender.com/add_food", {
         method: "POST",
         credentials: "include",
         body: formData,
@@ -167,7 +167,7 @@ const handleUploadRestaurantImage = async () => {
   formData.append("image", restaurantImage);
 
   try {
-    const res = await fetch("http://localhost:5000/upload_restaurant_image", {
+    const res = await fetch("https://flaskapiformealmonkey.onrender.com/upload_restaurant_image", {
       method: "POST",
       body: formData,
       credentials: "include",
@@ -190,7 +190,7 @@ const handleUploadRestaurantImage = async () => {
   // 🔹 Handle Logout
   const handleRestaurantLogout = async () => {
     try {
-      await fetch("http://localhost:5000/restaurant_logout", {
+      await fetch("https://flaskapiformealmonkey.onrender.com/restaurant_logout", {
         method: "POST",
         credentials: "include",
       });
@@ -235,7 +235,7 @@ const handleUploadRestaurantImage = async () => {
           onClick={async () => {
             try {
               const newStatus = !shopStatus;
-              await fetch("http://localhost:5000/toggle_shop_status", {
+              await fetch("https://flaskapiformealmonkey.onrender.com/toggle_shop_status", {
                 method: "PATCH",
                 credentials: "include",
                 headers: { "Content-Type": "application/json" },

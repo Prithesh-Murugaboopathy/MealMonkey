@@ -16,12 +16,12 @@ export default function RestaurantMenu({setCartItems}) {
   useEffect(() => {
     async function fetchMenu() {
       try {
-        const menuRes = await axios.get("http://localhost:5000/menu", {
+        const menuRes = await axios.get("https://flaskapiformealmonkey.onrender.com/menu", {
           params: { restaurant_id: id, available: true },
         });
         setMenu(menuRes.data);
 
-        const restRes = await axios.get(`http://localhost:5000/restaurants/${id}`);
+        const restRes = await axios.get(`https://flaskapiformealmonkey.onrender.com/restaurants/${id}`);
         setRestaurant(restRes.data);
       } catch (err) {
         console.error(err);
@@ -39,28 +39,32 @@ export default function RestaurantMenu({setCartItems}) {
       <h1 className="rest_name">{restaurant?.name}</h1>
 
       <div className="rest_menu_items">
-        {menu.map((item) => (
-          <div
-            key={item.food_id}
-            className="rest_menu_item"
-            onClick={() => {
-              setSelectedFood(item);
-              setModalOpen(true);
-            }}
-          >
-            <div className="image_square">
-              <img src={item.image_url} alt={item.name} className="image" />
-            </div>
-            <div className="desc">
-              <h2 className="rest_menu_item_name">
-                {item.name.length > 17 
-                ? item.name.slice(0, 17) + "..." 
-                : item.name}
-              </h2>
-              <p className="rest_menu_item_desc">₹{item.price}</p>
-            </div>
-          </div>
-        ))}
+        {menu.map((item) => {
+          const itemName = item.name || "Unnamed";
+          const itemImage = item.image_url || "/placeholder.png";
+
+          return (
+            <div
+              key={item.food_id}
+              className="rest_menu_item"
+              onClick={() => {
+                setSelectedFood(item);
+                setModalOpen(true);
+              }}
+            >
+      <div className="image_square">
+        <img src={itemImage} alt={itemName} className="image" />
+      </div>
+      <div className="desc">
+        <h2 className="rest_menu_item_name">
+          {itemName.length > 17 ? itemName.slice(0, 17) + "..." : itemName}
+        </h2>
+        <p className="rest_menu_item_desc">₹{item.price || "0"}</p>
+      </div>
+    </div>
+  );
+})}
+
       </div>
 
       {/* Modal */}

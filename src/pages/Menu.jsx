@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom"; // <-- import this
 import "./index.css";
 import "./css/Menu.css";
+import API from "../api/api";
 
 export default function Menu() {
   const [items, setItems] = useState([]);
@@ -15,7 +16,8 @@ export default function Menu() {
   useEffect(() => {
     const fetchMenu = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/menu/all", { withCredentials: true });
+        const res = await API.get("/menu/all");
+
         let data = res.data;
 
         if (vegFilter) data = data.filter(item => item.veg_nonveg === vegFilter);

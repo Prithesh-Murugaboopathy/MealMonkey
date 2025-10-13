@@ -6,6 +6,7 @@ import './css/MenuModal.css'
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import RemoveRoundedIcon from '@mui/icons-material/RemoveRounded';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
+import API from "../api/api";
 
 export default function MenuModal({ restaurant, food, onClose }) {
   const { cart, addToCart, updateCart, clearCart } = useContext(CartContext);
@@ -34,7 +35,7 @@ export default function MenuModal({ restaurant, food, onClose }) {
   const handleAdd = async () => {
     setLoading(true);
     try {
-      const res = await axios.get("http://localhost:5000/cart", { withCredentials: true });
+      const res = await API.get("/cart");
       const cartItems = res.data.items || [];
       console.log("Cart Items from backend:", cartItems);
 
@@ -80,8 +81,7 @@ export default function MenuModal({ restaurant, food, onClose }) {
     if (newQty < 0) return;
     setLoading(true);
     try {
-      await axios.patch(
-        "http://localhost:5000/cart/update",
+      await API.get("/cart/update",
         { food_id: food.food_id, quantity: newQty },
         { withCredentials: true }
       );

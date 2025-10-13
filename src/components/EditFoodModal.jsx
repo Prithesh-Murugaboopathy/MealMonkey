@@ -1,6 +1,7 @@
 // EditFoodModal.jsx
 import React, { useState, useEffect } from "react";
 import './index.css';
+import API from "../api/api";
 
 export default function EditFoodModal({ item, onClose, onSave }) {
   const [name, setName] = useState(item.name);
@@ -39,28 +40,28 @@ export default function EditFoodModal({ item, onClose, onSave }) {
     setDragStartY(null);
   };
 
-  const handleSave = async () => {
-    const formData = new FormData();
-    formData.append("name", name);
-    formData.append("description", description);
-    formData.append("price", price);
-    formData.append("veg_nonveg", vegNonveg);
-    if (imageFile) formData.append("image", imageFile);
+const handleSave = async () => {
+  const formData = new FormData();
+  formData.append("name", name);
+  formData.append("description", description);
+  formData.append("price", price);
+  formData.append("veg_nonveg", vegNonveg);
+  if (imageFile) formData.append("image", imageFile);
 
-    try {
-      const res = await fetch(`http://localhost:5000/edit_food/${item.food_id}`, {
-          method: "PATCH",
-          credentials: "include",
-          body: formData,
-      });
+  try {
+    const res = await API.patch(`/edit_food/${item.food_id}`, formData, {
+      withCredentials: true,
+    });
 
-      if (!res.ok) throw new Error("Failed to save changes");
-      onSave(); 
-      handleClose();
-    } catch (err) {
-      alert(err.message);
-    }
-  };
+    // Axios automatically throws for non-2xx responses, so no need for res.ok
+    onSave();
+    handleClose();
+  } catch (err) {
+    console.error(err);
+    alert(err.response?.data?.message || "Failed to save changes");
+  }
+};
+
 
   const handleImageChange = (e) => setImageFile(e.target.files[0]);
 

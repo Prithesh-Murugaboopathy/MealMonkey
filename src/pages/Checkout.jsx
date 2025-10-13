@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom"; // also needed for navigate
 import './css/Checkout.css'
 import RemoveRoundedIcon from '@mui/icons-material/RemoveRounded';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
+import API from "../api/api";
 
 
 export default function Checkout() {
@@ -26,7 +27,8 @@ export default function Checkout() {
     }
     setLoading(true);
     try {
-    await axios.post("http://localhost:5000/checkout", { cart }, { withCredentials: true });
+    await API.post("/checkout", {cart});
+
     toast.success("Order placed!");
     await clearCart(); // clear frontend cart
     navigate("/orders"); // redirect to orders page

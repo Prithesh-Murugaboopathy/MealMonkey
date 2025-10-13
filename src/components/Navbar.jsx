@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import "./css/Navbar.css";
+import API from "../api/api";
 
 export default function Navbar() {
   const [user, setUser] = useState({ name: "", avatar_url: "" });
@@ -10,9 +11,8 @@ export default function Navbar() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/get_user_name", {
-          withCredentials: true,
-        });
+        const res = await API.get("/get_user_name",);
+
 
         // extract only first name
         const firstName = res.data.user_name
@@ -34,7 +34,7 @@ export default function Navbar() {
 
   const handleLogout = async () => {
     try {
-      await axios.post("http://localhost:5000/logout", {}, { withCredentials: true });
+      await API.post("/logout");
       setUser(null);
     } catch (err) {
       console.error("Logout failed", err);
