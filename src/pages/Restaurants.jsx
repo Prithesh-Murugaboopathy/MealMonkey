@@ -9,12 +9,14 @@ export default function Restaurants() {
   const navigate = useNavigate(); // <-- hook
   const [restaurants, setRestaurants] = useState([]);
   const [loading, setLoading] = useState(true);
+  // eslint-disable-next-line no-unused-vars
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
+  // eslint-disable-next-line no-unused-vars
   const [menu, setMenu] = useState([]);
+  // eslint-disable-next-line no-unused-vars
   const [menuLoading, setMenuLoading] = useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [searchTerm, setSearchTerm] = useState(""); // <-- add this at the top
-  const [vegFilter, setVegFilter] = useState("");   // optional if you want veg/non-veg filter
-  const [priceOrder, setPriceOrder] = useState("asc"); // optional if you want price sort
 
 
   useEffect(() => {
@@ -35,28 +37,6 @@ export default function Restaurants() {
 const filteredRestaurants = restaurants.filter(r =>
   r.name.toLowerCase().includes(searchTerm.toLowerCase())
 );
-
-
-const openRestaurantMenu = async (restaurant) => {
-  setSelectedRestaurant(restaurant);
-  setMenuLoading(true);
-  try {
-    const res = await axios.get("http://localhost:5000/restaurant_menu", {
-      params: { 
-        restaurant_id: restaurant.restaurant_id,
-        available: true, // only show available items
-        veg: "veg", // optional filter
-        search: searchTerm, // optional
-        price_order: "asc"
-      }
-    });
-    setMenu(res.data);
-  } catch (err) {
-    console.error(err);
-  } finally {
-    setMenuLoading(false);
-  }
-};
  const goToRestaurant = (restaurant) => {
     navigate(`/restaurant/${restaurant.restaurant_id}`);
   };

@@ -15,7 +15,7 @@ export default function RestaurantDashboard({setCartItems}) {
 
   const [restaurantImage, setRestaurantImage] = useState(null);
   const [restaurantImagePreview, setRestaurantImagePreview] = useState(null);
-  const [restaurant, setRestaurant] = useState(null);
+  const [restaurant] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedFood, setSelectedFood] = useState(null); // new state
 

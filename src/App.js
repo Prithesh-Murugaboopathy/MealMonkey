@@ -20,9 +20,9 @@ import Menu from "./pages/Menu";
 
 import './App.css'
 import SearchBar from "./components/SearchBar";
-import Footer from "./components/Footer";
 
 function App() {
+  // eslint-disable-next-line no-unused-vars
   const [cartItems, setCartItems] = useState([]);
 
   useEffect(() => {
