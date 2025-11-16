@@ -10,6 +10,7 @@
   overflow-x: hidden !important;
   opacity: 0;
   animation: fadeIn 0.3s forwards;
+  padding: 30px;
 }
 
 /* Desktop modal content */

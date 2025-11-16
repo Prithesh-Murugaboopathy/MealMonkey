@@ -23,3 +23,10 @@ body{
     transition-duration: 0.4s;
     text-decoration: none !important;
 }
+a{
+    color: #fff;
+}
+.Toastify__toast--info{
+    width: 400px !important;
+    text-align: center;
+}

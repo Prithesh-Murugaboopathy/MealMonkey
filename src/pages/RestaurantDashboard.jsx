@@ -1,5 +1,5 @@
 // RestaurantDashboard.jsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import EditFoodModal from "../components/EditFoodModal";
 import "../components/index.css";
 import './css/RestDashboard.css'
@@ -10,6 +10,7 @@ export default function RestaurantDashboard({setCartItems}) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [shopStatus, setShopStatus] = useState(true);
+  const fileInputRef = useRef(null);
 
   const [editingItem, setEditingItem] = useState(null);
 
@@ -32,46 +33,80 @@ export default function RestaurantDashboard({setCartItems}) {
   const [vegFilter, setVegFilter] = useState("");
   const [priceOrder, setPriceOrder] = useState("asc");
   
+useEffect(() => {
+  setLoading(true);
 
-  useEffect(() => {
-    const url = new URL("https://flaskapiformealmonkey.onrender.com/restaurant_menu");
-    url.searchParams.append("search", searchTerm);
-    url.searchParams.append("veg", vegFilter);
-    url.searchParams.append("price_order", priceOrder);
+  const url = new URL("https://flaskapiformealmonkey.onrender.com/restaurant_menu");
+  url.searchParams.append("search", searchTerm);
+  url.searchParams.append("veg", vegFilter);
+  url.searchParams.append("price_order", priceOrder);
 
-    fetch(url, { credentials: "include" })
-      .then(res => res.json())
-      .then(data => setMenu(data));
-  }, [searchTerm, vegFilter, priceOrder]);
+  fetch(url, { credentials: "include" })
+    .then(res => res.json())
+    .then(data => {
+      if (!Array.isArray(data.menu)) {
+        console.error("Menu NOT array:", data);
+        setMenu([]);
+      } else {
+        setMenu(data.menu);
+      }
+      setLoading(false);
+    })
+    .catch(err => {
+      console.error(err);
+      setError("Failed to load menu");
+      setLoading(false);
+    });
+}, [searchTerm, vegFilter, priceOrder]);
 
-  useEffect(() => {
-    fetch("https://flaskapiformealmonkey.onrender.com/get_restaurant_profile", { credentials: "include" })
-      .then(res => res.json())
-      .then(data => {
-        if (data.image_url) setRestaurantImagePreview(data.image_url);
-      });
-  }, []);
 
-  const fetchMenu = () => {
-    setLoading(true);
-    fetch("https://flaskapiformealmonkey.onrender.com/restaurant_menu", { credentials: "include" })
-      .then((res) => {
-        if (!res.ok) throw new Error("Unauthorized or fetch failed");
-        return res.json();
-      })
-      .then((data) => {
-        setMenu(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        setError(err.message);
-        setLoading(false);
-      });
-  };
+useEffect(() => {
+  fetch("https://flaskapiformealmonkey.onrender.com/get_restaurant_image", {
+    credentials: "include",
+  })
+    .then(res => res.json())
+    .then(data => {
+      if (data.url) {
+        setRestaurantImagePreview(data.url); // show existing image
+      }
+    })
+    .catch(err => console.error("Image fetch failed:", err));
+}, []);
 
-  useEffect(() => {
-    fetchMenu();
-  }, []);
+const fetchMenu = () => {
+  setLoading(true);
+
+  console.log("Fetching menu...");
+
+  fetch("https://flaskapiformealmonkey.onrender.com/restaurant_menu", { credentials: "include" })
+    .then((res) => {
+      console.log("Response status:", res.status);
+
+      if (!res.ok) {
+        return res.text().then(t => {
+          console.error("Backend Error Text:", t);
+          throw new Error("Fetch failed: " + t);
+        });
+      }
+
+      return res.json();
+    })
+    .then((data) => {
+      console.log("Menu data received:", data);
+
+      if (!Array.isArray(data.menu)) {
+        throw new Error("Menu format invalid");
+      }
+      setMenu(data.menu);
+
+      setLoading(false);
+    })
+    .catch((err) => {
+      console.error("Fetch error:", err);
+      setError(err.message);
+      setLoading(false);
+    });
+};
 
   useEffect(() => {
     fetch("https://flaskapiformealmonkey.onrender.com/get_shop_status", {
@@ -86,6 +121,7 @@ export default function RestaurantDashboard({setCartItems}) {
   const handleEdit = (item) => {
     const mappedItem = { ...item, menu_id: item.menu_id || item.food_id };
     setEditingItem(mappedItem);
+    
   };
 
   const handleDelete = async (menu_id) => {
@@ -95,7 +131,7 @@ export default function RestaurantDashboard({setCartItems}) {
         method: "DELETE",
         credentials: "include",
       });
-      fetchMenu();
+      setMenu(prev => prev.filter(item => item.food_id !== menu_id));
     } catch {
       alert("Failed to delete food");
     }
@@ -109,7 +145,12 @@ export default function RestaurantDashboard({setCartItems}) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ available: !currentStatus }),
       });
-      fetchMenu();
+      setMenu(prev =>
+        prev.map(i =>
+          i.food_id === menu_id ? { ...i, available: !currentStatus } : i
+        )
+      );
+
     } catch {
       alert("Failed to update availability");
     }
@@ -117,32 +158,42 @@ export default function RestaurantDashboard({setCartItems}) {
 
   // 🔹 Handle Add Food
   const handleAddFood = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    const formData = new FormData();
-    formData.append("name", name);
-    formData.append("description", description);
-    formData.append("price", price);
-    formData.append("veg_nonveg", vegNonveg);
-    if (imageFile) formData.append("image", imageFile);
+  const formData = new FormData();
+  formData.append("name", name);
+  formData.append("description", description);
+  formData.append("price", price);
+  formData.append("veg_nonveg", vegNonveg);
+  if (imageFile) formData.append("image", imageFile);
 
-    try {
-      await fetch("https://flaskapiformealmonkey.onrender.com/add_food", {
+  try {
+    const res = await fetch(
+      "https://flaskapiformealmonkey.onrender.com/add_food",
+      {
         method: "POST",
         credentials: "include",
         body: formData,
-      });
-      setName("");
-      setDescription("");
-      setPrice("");
-      setVegNonveg("veg");
-      setImageFile(null);
-      setImagePreview(null);
-      fetchMenu();
-    } catch {
-      alert("Failed to add food");
-    }
-  };
+      }
+    );
+
+    // 🔥 Add to menu instantly
+    const newItem = await res.json();
+    setMenu(prev => [...prev, newItem]);
+
+    // 🔥 Clear form
+    setName("");
+    setDescription("");
+    setPrice("");
+    setVegNonveg("veg");
+    setImageFile(null);
+    setImagePreview(null);
+
+  } catch (err) {
+    alert("Failed to add food");
+  }
+};
+
 
   // 🔹 Handle Image Change
   const handleImageChange = (e) => {
@@ -203,33 +254,46 @@ const handleUploadRestaurantImage = async () => {
   if (loading) return <div>Loading menu...</div>;
   if (error) return <div>Error: {error}</div>;
 
+  const refreshMenu = () => {
+  fetch("https://flaskapiformealmonkey.onrender.com/restaurant_menu", { credentials: "include" })
+    .then(res => res.json())
+    .then(data => setMenu(data.menu))
+  };
+
+
   return (
     <div className="rest_dashboard">
-      <h2 className="page_title">Hey Restaurant Manager,</h2>
-      <h3>Restaurant Profile Image</h3>
-      <div className="image_div">
-        {restaurantImagePreview && (
-          <img
-            src={restaurantImagePreview}
-            alt="Restaurant"
-            className="rest_dashboard_image"
+      <div className="left_dashboard">
+        <h2 className="page_title">Hey Restaurant Manager,</h2>
+        <div className="image_div">
+          <input
+            type="file"
+            accept="image/*"
+            ref={fileInputRef}
+            style={{ display: "none" }}
+            onChange={handleRestaurantImageChange}
           />
-        )}
-        <div className="sub_div">
-          <input type="file" accept="image/*" onChange={handleRestaurantImageChange} />
-          <button onClick={handleUploadRestaurantImage}>Upload Image</button>
-        </div>
-      </div>
-      
 
-      <button
-        onClick={handleRestaurantLogout}
-        style={{ float: "right", marginBottom: "20px" }}
-      >
-        Logout
-      </button>
+          <div className="image_container" onClick={() => fileInputRef.current.click()}>
+            {restaurantImagePreview && (
+              <img
+                src={restaurantImagePreview}
+                alt="Restaurant"
+                className="rest_dashboard_image"
+              />
+            )}
 
-      <div style={{ marginBottom: "20px" }}>
+            <div className="image_overlay">
+              Change Restaurant Banner
+            </div>
+          </div>
+          
+          <div className="sub_div" style={{display: 'flex', textAlign: 'right', marginTop: '10px', marginBottom: '10px'}}>
+            <button onClick={handleUploadRestaurantImage} className="place_order" style={{padding: '10px 10px 10px 10px'}}>Upload Image</button>
+          </div>
+        </div>     
+
+        <div style={{ marginBottom: "20px", fontFamily: 'calibri, sans-serif'}}>
         <strong>Shop Status: </strong>
         <button
           onClick={async () => {
@@ -246,25 +310,35 @@ const handleUploadRestaurantImage = async () => {
               alert("Failed to toggle shop status");
             }
           }}
+          className="place_order"
+          style={{padding: '7px', marginLeft: '10px', backgroundColor: '#FF5725'}}
         >
           {shopStatus ? "Open" : "Closed"}
         </button>
+        <button
+          onClick={handleRestaurantLogout}
+          style={{ float: "right", marginBottom: "20px", padding: '10px', backgroundColor: "#FF4041", width: "100px"}}
+          className="place_order"
+        >
+          Logout
+        </button>
       </div>
-
-      <h3>Add Food</h3>
-      <form onSubmit={handleAddFood}>
+      <form onSubmit={handleAddFood} style={{display: 'flex', flexDirection: 'column'}}>
+        
         <input
           type="text"
           placeholder="Food Name"
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
+          className="input"
         />
         <input
           type="text"
           placeholder="Description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
+          className="input"
         />
         <input
           type="number"
@@ -272,42 +346,41 @@ const handleUploadRestaurantImage = async () => {
           value={price}
           onChange={(e) => setPrice(e.target.value)}
           required
+          className="input"
         />
-        <label>Veg / Non-Veg</label>
         <select
           value={vegNonveg}
           onChange={(e) => setVegNonveg(e.target.value)}
           required
+          className="input"
         >
           <option value="veg">Veg</option>
           <option value="non-veg">Non-Veg</option>
         </select>
-        <input type="file" accept="image/*" onChange={handleImageChange} />
-        {imagePreview && (
-          <div style={{ marginTop: "10px" }}>
-            <p>Preview:</p>
-            <img
-              src={imagePreview}
-              alt="Preview"
-              style={{ width: "150px", height: "150px", objectFit: "cover" }}
-            />
-          </div>
-        )}
-        <button type="submit">Add Food</button>
+        <input type="file" accept="image/*" onChange={handleImageChange} 
+          className="input"
+         />        
+        <div className="add_btn">
+          <button type="submit" className="place_order stupid_btn" style={{backgroundColor: "#232229"}}>Add Food</button>
+        </div>
       </form>
-
-      <div style={{ margin: "20px 0" }}>
+      
+      </div>
+      <div className="right_dashboard">
+          <div style={{ margin: "20px 0" }}>
         <input
           type="text"
           placeholder="Search food..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          style={{ marginRight: "10px" }}
+          style={{ marginRight: "10px", width: '60%'}}
+          className="input"
         />
         <select
           value={vegFilter}
           onChange={(e) => setVegFilter(e.target.value)}
           style={{ marginRight: "10px" }}
+          className="input"
         >
           <option value="">All</option>
           <option value="veg">Veg</option>
@@ -316,42 +389,53 @@ const handleUploadRestaurantImage = async () => {
         <select
           value={priceOrder}
           onChange={(e) => setPriceOrder(e.target.value)}
+          className="input"
         >
           <option value="asc">Price Low → High</option>
           <option value="desc">Price High → Low</option>
         </select>
       </div>
-
       <div className="rest_menu_items">
-        {menu.map((item) => (
-          <div
-            key={item.food_id}
-            className="rest_menu_item"
-            onClick={() => {
-              setSelectedFood(item);
-              setModalOpen(true);
-            }}
-          >
-            <div className="image_square">
-              <img src={item.image_url} alt={item.name} className="image" />
-            </div>
-            <div className="desc">
-              <h2 className="rest_menu_item_name">
-                {item.name.length > 17 
-                ? item.name.slice(0, 17) + "..." 
-                : item.name}
-              </h2>
-              <p className="rest_menu_item_desc">₹{item.price}</p>
-              <button onClick={() => handleEdit(item)}>Edit</button>
-              <button onClick={() => handleDelete(item.food_id)}>Delete</button>
-              <button
-                onClick={() => toggleAvailability(item.food_id, item.available)}
+        {menu.map((item) => {
+          if (!item || !item.name) return null;   // protect against undefined
+
+          return (
+            <div
+              key={item.food_id}
+              className="rest_menu_item"
+
+            >
+              <div 
+                className="image_square"
+                onClick={() => {
+                  setSelectedFood(item);
+                  setModalOpen(true);
+                }}
               >
-                {item.available ? "Mark Unavailable" : "Mark Available"}
-              </button>
+                <img src={item.image_url} alt={item.name} className="image" />
+              </div>
+              <div className="desc">
+                <h2 className="rest_menu_item_name">
+                  {item.name.length > 17 
+                    ? item.name.slice(0, 17) + "..." 
+                    : item.name}
+                </h2>
+                <p className="rest_menu_item_desc">₹{item.price}</p>
+              </div>
+              <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                <button style={{padding: '10px', borderRadius: 7, border: 'none', backgroundColor: '#17963dff', color: "#fff", width: 75, height:40, cursor: 'pointer'}} onClick={() => handleEdit(item)}>Edit</button>
+                <button style={{padding: '10px', borderRadius: 7, border: 'none', backgroundColor: '#FF4041', color: "#fff", width: 75, height:40, cursor: 'pointer'}} onClick={() => handleDelete(item.food_id)}>Delete</button>
+                <button
+                  style={{padding: '10px', borderRadius: 7, border: 'none', backgroundColor: '#F75326', color: "#fff", width: 150, height:40, cursor: 'pointer'}}
+                  onClick={() => toggleAvailability(item.food_id, item.available)}
+                >
+                  {item.available ? "Mark Unavailable" : "Mark Available"}
+                </button>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
+
       </div>
 
       {/* Modal */}
@@ -368,9 +452,11 @@ const handleUploadRestaurantImage = async () => {
         <EditFoodModal
           item={editingItem}
           onClose={() => setEditingItem(null)}
-          onSave={fetchMenu}
+          setMenu={setMenu}
+          refreshMenu={refreshMenu}
         />
       )}
+      </div>
     </div>
   );
 }

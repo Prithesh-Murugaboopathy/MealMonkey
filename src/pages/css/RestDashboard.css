@@ -1,6 +1,12 @@
 .rest_dashboard{
     margin-top: 100px;
     padding: 30px 150px 0 150px;
+    display: flex;
+    justify-content: space-between;
+}
+.left_dashboard{
+    display: flex;
+    flex-direction: column;
 }
 .rest_dashboard_image{
     width: 400px;
@@ -9,4 +15,63 @@
     border-radius: 10px;
     object-fit: cover;      /* fills the container while maintaining aspect ratio */
     object-position: center; /* crops from center */
+    /* margin-left: 150px; */
+}
+.image_container {
+  position: relative;
+  width: 320px; /* adjust as needed */
+  height: 200px !important;
+  cursor: pointer;
+  font-family: "Ranille", sans-serif;
+}
+.input{
+    border: 1px solid #ccc;
+    margin: 20px;
+    padding: 5px;
+    border-radius: 7px;
+}
+
+input:focus {
+  outline: none;
+  box-shadow: none; /* in case some browsers add shadow */
+}
+.rest_dashboard_image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.image_overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.45);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: 0.3s ease;
+  font-size: 18px;
+  border-radius: 12px;
+}
+
+.image_container:hover .image_overlay {
+  opacity: 1;
+}
+
+.stupid_btn{
+    right: 0 !important;
+    width: fit-content;
+    margin-right: 20px;
+}
+.add_btn{
+    width: 100%;
+    text-align: right;
+}
+.right_dashboard{
+    flex: 0.95;
 }

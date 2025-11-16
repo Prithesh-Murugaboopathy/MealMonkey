@@ -46,10 +46,10 @@ export default function MenuModal({ restaurant, food, onClose }) {
         toast.info(({ closeToast }) => (
           <div>
             <p>Cart has items from another restaurant!</p>
-            <div className="flex justify-between mt-2">
-              <button className="bg-gray-300 px-2 py-1 rounded mr-2" onClick={closeToast}>Cancel</button>
+            <div style={{display: 'flex', }}>
+              <button className="clear_cart_btn" style={{color: '#000', fontSize:'13px'}} onClick={closeToast}>Never Mind</button>
               <button
-                className="bg-red-500 text-white px-2 py-1 rounded"
+                className="checkout_btn" style={{color: '#000', fontSize:'13px'}}
                 onClick={async () => {
                   await clearCart();
                   await addToCart(food);
@@ -57,7 +57,7 @@ export default function MenuModal({ restaurant, food, onClose }) {
                   toast.success("Cart cleared & item added!");
                 }}
               >
-                Clear & Add
+                Start Fresh!
               </button>
             </div>
           </div>
@@ -77,20 +77,26 @@ export default function MenuModal({ restaurant, food, onClose }) {
     }
   };
 
-  const handleUpdate = async (newQty) => {
-    if (newQty < 0) return;
-    setLoading(true);
-    try {
-      await API.get("/cart/update",
-        { food_id: food.food_id, quantity: newQty },
-        { withCredentials: true }
-      );
-      setQuantity(newQty); // Update UI instantly
-    } catch {
-      toast.error("Failed to update cart");
-    }
-    setLoading(false);
-  };
+const handleUpdate = async (newQty) => {
+  if (newQty < 0) return;
+  setLoading(true);
+
+  try {
+    await API.patch(
+      "/cart/update",
+      { food_id: food.food_id, quantity: newQty },
+      { withCredentials: true }
+    );
+
+    setQuantity(newQty); // UI update
+  } catch (err) {
+    console.error(err);
+    toast.error("Failed to update cart");
+  }
+
+  setLoading(false);
+};
+
 
   const modalStyle = {
     transform: closing ? "translateY(100px)" :

@@ -43,9 +43,9 @@ export default function Navbar() {
 
   return (
     <div className="navbar">
-      <div className="logo">
+      <Link to={'/'} className="logo">
         Meal Monkey<span style={{ color: "#f75326" }}>.</span>
-      </div>
+      </Link>
 
       <div className="nav_links">
         <Link to="/menu">Menu</Link>
