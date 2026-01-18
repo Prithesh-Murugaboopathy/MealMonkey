@@ -134,7 +134,8 @@ export default function RestaurantDashboard({ setCartItems }) {
     try {
       await API.delete(`/delete_food/${id}`);
       setMenu(prev => prev.filter(item => item.food_id !== id));
-    } catch { alert("Delete failed"); }
+      toast.success("Dish has been deleted!!")
+    } catch { toast.error("Delete failed"); }
   };
   const handleBannerUpload = async (file) => {
   const formData = new FormData();
