@@ -3,7 +3,7 @@ import axios from "axios";
 
 const API = axios.create({
   baseURL: "https://flaskapiformealmonkey.onrender.com",
-  withCredentials: true, // <--- important!
+  withCredentials: true,
 });
 
 export default API;

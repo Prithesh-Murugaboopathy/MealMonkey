@@ -30,6 +30,20 @@
 .results_count{
   text-align: center;
 }
+.restaurant_search_pill{
+  padding-left: 20px !important;
+  padding-right: 20px !important;
+  padding-top:13px !important;
+  padding-bottom: 13px !important;
+}
+.restaurant_search_pill .search_wrapper{
+  height: 40px;
+}
+.restaurant_search_pill .search_wrapper .premium_search_input{
+  height: max-content;
+  /* background-color: #ccc !important; */
+  height: 60px;
+}
 .food_image_main {
   width: 100%;
   height: 100%;

@@ -73,12 +73,12 @@
 .bento_card:hover { transform: scale(1.02); }
 
 .bg_matte { background: #232229; color: white; }
-.bg_green { background: #20a875; color: white; }
+.bg_green { background: #20a875; color: white;}
 .bg_white { background: white; color: #232229; }
 
 /* Grid Positioning */
 .tall { grid-row: span 2; display: flex; flex-direction: column; justify-content: center; }
-.wide { grid-column: span 2; display: flex; justify-content: space-around; align-items: center; }
+.wide { grid-column: span 2; display: flex; justify-content: space-around; align-items: center; text-align: center; }
 .wide_alt { grid-column: span 2; display: flex; flex-direction: column; justify-content: center; }
 
 /* Card Content Styling */
@@ -90,8 +90,8 @@
 .bento_card h4 { font-size: 20px; font-weight: 800; margin: 0; }
 
 .stat_unit { text-align: center; }
-.stat_unit h3 { font-size: 50px; font-weight: 900; color: #232229; }
-.stat_unit p { font-size: 11px; font-weight: 800; letter-spacing: 1px; color: #232229; }
+.stat_unit h3 { font-size: 50px; font-weight: 900; color: #fff; }
+.stat_unit p { font-size: 11px; font-weight: 800; letter-spacing: 1px; color: #fff; }
 
 .card_footer { font-size: 12px; font-weight: 800; color: #52525b; margin-top: auto; }
 .arrow_top_right { position: absolute; top: 40px; right: 40px; color: #20a875; }
@@ -150,12 +150,32 @@
 
 .green_text { color: #20a875; }
 
-@media (max-width: 1024px) {
+@media (max-width: 1500px) {
   .bento_grid {
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: auto;
   }
   .wide, .wide_alt, .tall { grid-column: span 2; grid-row: auto; height: 300px; }
+  .bento_card h3{
+    font-size: 40px;
+  }
+  .bento_card:nth-child(2){
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    height: 500px;
+    text-align: center !important;
+    padding-right: 50px;
+  }
+  .bento_card:nth-child(1){
+    text-align: center !important;
+  }
+  .bento_card:nth-child(5) > h3{
+    font-size: 20px !important;
+  }
+  .bento_icon_large{
+    align-self: center;
+  }
 }
 .bento_benefit_text {
   font-size: 22px;
