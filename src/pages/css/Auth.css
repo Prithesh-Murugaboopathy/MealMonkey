@@ -164,7 +164,7 @@
 
 .input_inner input:autofill {
     font-family: 'Outfit', sans-serif !important;
-    background-color: #1e1e21 !important;
+    background-color: #1e1e2100 !important;
     -webkit-text-fill-color: white !important;
 }
 

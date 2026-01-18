@@ -130,7 +130,7 @@
 }
 
 .dash_form input, .dash_form textarea, .dash_form select {
-  width: 100%;
+  width: 90%;
   padding: 12px;
   margin-bottom: 15px;
   border: 1px solid #ddd;
@@ -227,13 +227,14 @@
   position: absolute;
   top: 15px;
   right: 15px;
-  width: 18px;
-  height: 18px;
+  width: 15px;
+  height: 15px;
   border: 2px solid white;
   border-radius: 4px;
+  border-top-right-radius: 15px;
 }
-.diet_indicator.veg { background: #10b981; }
-.diet_indicator.non-veg { background: #ef4444; }
+.diet_indicator.veg { background: #fff !important; }
+.diet_indicator.non-veg { background: #fff !important; }
 
 .open_now_tag {
   position: absolute;

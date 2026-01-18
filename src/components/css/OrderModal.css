@@ -2,7 +2,7 @@
 
 
 .order_modal_details {
-  max-width: 450px !important;
+  width: 86% !important;
   text-align: center;
   padding: 40px 30px !important;
 }
@@ -100,7 +100,6 @@
 .total_highlight span:last-child {
   color: #20a875;
 }
-sas
 .order_items_container::-webkit-scrollbar {
   width: 4px;
 }

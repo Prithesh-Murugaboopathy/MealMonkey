@@ -14,6 +14,7 @@ import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownR
 import API from "../api/api";
 import "./css/RestDashboard.css";
 
+// --- CUSTOM DROPDOWN COMPONENT (Premium Style) ---
 const PremiumSelect = ({ value, options, onChange, placeholder }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -199,6 +200,7 @@ export default function RestaurantDashboard({ setCartItems }) {
         </aside>
 
         <section className="menu_management_section">
+            {/* --- INTEGRATED SEARCH PILL --- */}
             <div className="filter_container_pill dash_pill_style">
                 <div className="search_wrapper">
                     <SearchRoundedIcon className="search_icon" />
@@ -240,7 +242,9 @@ export default function RestaurantDashboard({ setCartItems }) {
                     <div key={item.food_id} className={`food_card_dark ${!item.available ? 'grayed' : ''}`}>
                         <div className="food_card_img" onClick={() => { setSelectedFood(item); setModalOpen(true); }}>
                             <img src={item.image_url} alt={item.name} />
-                            <div className={`diet_indicator ${item.veg_nonveg}`}></div>
+                            <div className={`diet_indicator ${item.veg_nonveg}`}>
+                              <div className="dot"></div>
+                            </div>
                             {!item.available && <div className="closed_tag">HIDDEN</div>}
                         </div>
                         <div className="food_card_body">

@@ -15,13 +15,6 @@
 .go2072408551{
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif !important;
 }
-input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus,
-input:-webkit-autofill:active {
-  -webkit-box-shadow: 0 0 0px 1000px white inset !important;
-  -webkit-text-fill-color: #000 !important;
-}
 
 .input_inner input::-webkit-outer-spin-button,
 .input_inner input::-webkit-inner-spin-button {
