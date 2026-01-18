@@ -42,6 +42,8 @@
 
 .desktop_links {
   display: flex;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  letter-spacing: 1px;
   gap: 30px;
 }
 
@@ -49,7 +51,7 @@
   color: #a1a1aa;
   text-decoration: none;
   font-weight: 700;
-  font-size: 15px;
+  font-size: 17px !important;
   transition: 0.3s;
 }
 
@@ -131,6 +133,8 @@
 .dropdown_header {
   color: white;
   font-weight: 800;
+  font-family: "Ranille", sans-serif;
+  letter-spacing: 2px;
   font-size: 18px;
   margin-bottom: 20px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
@@ -141,6 +145,7 @@
   display: flex;
   flex-direction: column;
   gap: 15px;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   margin-bottom: 25px;
 }
 
@@ -426,10 +431,11 @@
   position: fixed;
   top: 0;
   left: 0;
+  right: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.2); 
-  backdrop-filter: blur(4px);
+  /* background: rgba(0, 0, 0, 0.2);  */
+  /* backdrop-filter: blur(4px); */
   z-index: 1500; 
   pointer-events: auto !important;
   cursor: default;

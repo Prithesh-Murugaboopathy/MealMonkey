@@ -4,7 +4,6 @@ import API from "../api/api";
 import "./css/Navbar.css";
 import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
-import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 
 export default function Navbar() {
   const [user, setUser] = useState({ name: "", avatar_url: "" });
@@ -12,7 +11,6 @@ export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const dropdownRef = useRef(null);
-  const location = useLocation();
 
   useEffect(() => {
     const fetchUser = async () => {

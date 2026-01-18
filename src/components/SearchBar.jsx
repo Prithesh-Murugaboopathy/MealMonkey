@@ -122,7 +122,7 @@ const SearchBar = () => {
                 <p className="suggestion_label">Quick Cravings</p>
                 <div className="suggestion_tags">
                   <span onClick={() => setSearchTerm("Pizza")}>Pizza</span>
-                  <span onClick={() => setSearchTerm("Dum")}>Dum</span>
+                  <span onClick={() => setSearchTerm("Dum House")}>Dum House</span>
                 </div>
               </div>
             ) : (

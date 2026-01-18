@@ -13,7 +13,7 @@ export default function CartModal() {
   
   useEffect(() => {
     fetchCart();
-  }, []);
+  });
 
   const subtotal = cart?.reduce((acc, item) => acc + (item.price * item.quantity), 0) || 0;
   const deliveryFee = subtotal > 0 ? 40 : 0;
