@@ -1,38 +1,133 @@
-.rest_menu{
-    margin-top: 100px;
-    padding: 30px 0 0 150px;
-}
-.rest_name{
-    font-family: "Ranille", sans-serif;
-    color: #ff5725;
-    letter-spacing: 1px;
-    font-size: 40px;
-}
-.rest_menu_items {
-    margin-top: 30px;
-    padding: 30px;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
-    gap: 20px; /* space between items */
-    cursor: pointer;
+.restaurant_hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 60px;
+  width: 100%;
 }
 
-.rest_menu_item{
-    width: 350px;
-    padding: 30px;
-    text-align: center;
+.top_nav_bar {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start; 
+  margin-bottom: 20px;
 }
-.rest_menu_item_name{
-    text-align: left;
-    font-family: "Ranille", sans-serif;
+
+.back_button_premium {
+  background: #18181b;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 100px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
-.desc{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+
+.back_button_premium:hover {
+  background: #27272a;
+  transform: translateX(-5px);
 }
-.rest_menu_item_desc{
-    font-family: "Calibri", sans-serif;
-    font-weight: 600;
-    margin-top: 20px;
+
+.hero_content {
+  text-align: center;
+  max-width: 900px; 
+  width: 100%;
+}
+
+.page_title_premium {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(32px, 5vw, 64px); 
+  color: #18181b;
+  margin: 0;
+  line-height: 1.1; 
+  word-wrap: break-word; 
+  overflow-wrap: break-word;
+}
+
+.restaurant_info_pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: white;
+  padding: 8px 24px;
+  border-radius: 100px;
+  margin-top: 25px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+  font-size: 14px;
+  font-weight: 700;
+  color: #64748b;
+  border: 1px solid rgba(0,0,0,0.02);
+}
+
+@media (max-width: 768px) {
+  .top_nav_bar {
+    padding-left: 10px; 
+  }
+  
+  .restaurant_hero {
+    margin-bottom: 40px;
+  }
+}
+.status_indicator {
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.status_indicator.is_open {
+    color: #20a875;
+}
+
+.status_indicator.is_closed {
+    color: #ff4d4f;
+}
+
+.menu_grid.shop_offline {
+    cursor: not-allowed;
+}
+
+.menu_grid.shop_offline .food_card_premium > .image_container {
+    filter: grayscale(1) opacity(0.7);
+    pointer-events: auto; 
+}
+
+.menu_grid.shop_offline .food_card_premium:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+.menu_grid.shop_offline .view_menu_hint {
+    color: #ff4d4f;
+    font-weight: 800;
+}
+
+.restaurant_info_pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: white;
+  padding: 8px 24px;
+  border-radius: 100px;
+  margin-top: 25px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+  font-size: 14px;
+  font-weight: 700;
+  color: #64748b;
+  border: 1px solid rgba(0,0,0,0.02);
+}
+
+.status_indicator.is_open {
+    animation: statusPulse 2s infinite;
+}
+
+@keyframes statusPulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.7; }
+    100% { opacity: 1; }
 }

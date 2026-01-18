@@ -1,33 +1,115 @@
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Playfair+Display:wght@900&display=swap');
+
+
+.order_modal_details {
+  max-width: 450px !important;
+  text-align: center;
+  padding: 40px 30px !important;
+}
+.modal_card_premium{
+  width: 90%;
+}
+.receipt_icon_wrapper {
+  width: 50px;
+  height: 50px;
+  background: rgba(32, 168, 117, 0.1);
+  border-radius: 15px;
   display: flex;
-  justify-content: center;
   align-items: center;
-  z-index: 1000;
-  font-family: "Calibri", sans-serif;
+  justify-content: center;
+  margin: 0 auto 20px;
+}
+.modal_title_text{
+  color: #fff;
+  font-family: "Ranille", sans-serif;
 }
 
-.order-modal {
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(10px);
-  border-radius: 16px;
-  padding: 20px;
-  width: 400px;
-  max-height: 80vh;
+.order_id_subtitle {
+  color: #71717a;
+  font-size: 14px;
+  margin-top: 5px;
+  font-weight: 500;
+}
+
+/* Items Section */
+.order_items_container {
+  text-align: left;
+  margin-top: 40px;
+  max-height: 250px;
   overflow-y: auto;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  padding-right: 5px;
 }
 
-.close_btn {
-  background: transparent;
-  border: none;
-  font-size: 20px;
-  position: absolute;
-  right: 15px;
-  top: 10px;
-  cursor: pointer;
+.section_label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #52525b;
+  margin-bottom: 15px;
 }
+
+.order_item_row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.item_name_text {
+  color: white;
+  font-weight: 600;
+  font-size: 16px;
+  margin: 0;
+}
+
+.item_qty_price {
+  color: #71717a;
+  font-size: 13px;
+  margin-top: 2px;
+}
+
+.item_total {
+  color: white;
+  font-weight: 700;
+  font-size: 15px;
+}
+
+/* Footer Section */
+.order_modal_footer {
+  margin-top: 30px;
+  border-top: 1px dashed rgba(255, 255, 255, 0.1);
+  padding-top: 20px;
+}
+
+.summary_row_premium {
+  display: flex;
+  justify-content: space-between;
+  color: #a1a1aa;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.total_highlight {
+  margin-top: 15px;
+  color: white;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.total_highlight span:last-child {
+  color: #20a875;
+}
+sas
+.order_items_container::-webkit-scrollbar {
+  width: 4px;
+}
+.order_items_container::-webkit-scrollbar-thumb {
+  background: #27272a;
+  border-radius: 10px;
+}
+
+/* Status Pill overrides (Matches Orders Page) */
+.status_pill_premium.delivered { background: rgba(32, 168, 117, 0.1); color: #20a875; border: 1px solid rgba(32, 168, 117, 0.2); }
+.status_pill_premium.pending { background: rgba(234, 179, 8, 0.1); color: #eab308; border: 1px solid rgba(234, 179, 8, 0.2); }
+.status_pill_premium.cancelled { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); }

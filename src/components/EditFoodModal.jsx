@@ -1,7 +1,9 @@
-// EditFoodModal.jsx
-import React, { useState, useEffect } from "react";
-import './css/MenuModal.css'
+import React, { useState, useEffect, useRef } from "react";
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
+import CloudUploadRoundedIcon from '@mui/icons-material/CloudUploadRounded';
+import toast, { Toaster } from 'react-hot-toast';
 import API from "../api/api";
+import './css/MenuModal.css';
 
 export default function EditFoodModal({ item, onClose, setMenu, refreshMenu }) {
   const [name, setName] = useState(item.name);
@@ -9,43 +11,34 @@ export default function EditFoodModal({ item, onClose, setMenu, refreshMenu }) {
   const [price, setPrice] = useState(item.price);
   const [vegNonveg, setVegNonveg] = useState(item.veg_nonveg);
   const [imageFile, setImageFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
 
   const [closing, setClosing] = useState(false);
   const [open, setOpen] = useState(false);
-  const [dragStartY, setDragStartY] = useState(null);
-  const [dragOffset, setDragOffset] = useState(0);
-
-  const isMobile = window.innerWidth < 768;
+  const [loading, setLoading] = useState(false);
+  const fileInputRef = useRef(null);
 
   useEffect(() => {
-    setTimeout(() => setOpen(true), 10);
+    setOpen(true);
   }, []);
 
   const handleClose = () => {
     setClosing(true);
-    setOpen(false);
     setTimeout(() => {
       onClose();
-      setClosing(false);
-      setDragOffset(0);
     }, 300);
   };
 
-  const handleTouchStart = (e) => setDragStartY(e.touches[0].clientY);
-
-  const handleTouchMove = (e) => {
-    if (!dragStartY) return;
-    const offset = e.touches[0].clientY - dragStartY;
-    if (offset > 0) setDragOffset(offset);
-  };
-
-  const handleTouchEnd = () => {
-    if (dragOffset > 100) handleClose();
-    else setDragOffset(0);
-    setDragStartY(null);
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImageFile(file);
+      setImagePreview(URL.createObjectURL(file));
+    }
   };
 
   const handleSave = async () => {
+    setLoading(true);
     const formData = new FormData();
     formData.append("name", name);
     formData.append("description", description);
@@ -54,9 +47,7 @@ export default function EditFoodModal({ item, onClose, setMenu, refreshMenu }) {
     if (imageFile) formData.append("image", imageFile);
 
     try {
-      const res = await API.patch(`/edit_food/${item.food_id}`, formData, {
-        withCredentials: true,
-      });
+      const res = await API.patch(`/edit_food/${item.food_id}`, formData);
     
       const updatedItem = {
         ...item,
@@ -65,123 +56,83 @@ export default function EditFoodModal({ item, onClose, setMenu, refreshMenu }) {
         image_url: res.data.image_url || item.image_url,
       };
     
-      setMenu(prev =>
-        prev.map(i =>
-          i.food_id === item.food_id
-            ? updatedItem
-            : i
-        )
-      );
+      setMenu(prev => prev.map(i => i.food_id === item.food_id ? updatedItem : i));
     
-      // 🔥 Force reload fresh DB data
-      if (typeof refreshMenu === "function") {
-        refreshMenu();
-      }
-    
+      if (typeof refreshMenu === "function") refreshMenu();
+      
+      toast.success("Dish updated successfully");
       handleClose();
     } catch (err) {
-      console.error(err);
-      alert(err.response?.data?.message || "Failed to save changes");
+      toast.error(err.response?.data?.message || "Failed to save changes");
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleImageChange = (e) => setImageFile(e.target.files[0]);
-
-  const modalStyle = {
-    transform: closing
-      ? "translateY(100px)"
-      : dragOffset
-      ? `translateY(${dragOffset}px)`
-      : open
-      ? "translateY(0)"
-      : "translateY(50px)",
-    opacity: open ? 1 : 0,
-    transition: "all 0.3s ease",
-    bottom: isMobile ? 0 : "auto",
-    borderRadius: isMobile ? "12px 12px 0 0" : "8px",
-  };
-
   return (
-    <div
-      className="modal-overlay"
-      onClick={handleClose}
-      style={{
-        backdropFilter: "blur(6px)",
-        backgroundColor: "rgba(0,0,0,0.4)",
-        transition: "opacity 0.3s ease",
-        opacity: open ? 1 : 0,
-      }}
-    >
-      <div
-        className="modal-content"
+    <div className={`modal_overlay ${closing ? 'fade_out' : 'fade_in'}`} onClick={handleClose}>
+      <Toaster position="bottom-right" />
+      <div 
+        className={`modal_card_premium ${closing ? 'slide_down' : 'slide_up'}`} 
         onClick={(e) => e.stopPropagation()}
-        style={modalStyle}
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
       >
-        <button className="close_btn" onClick={handleClose}>
-          ✖
+        <button className="modal_close_btn" onClick={handleClose}>
+          <CloseRoundedIcon />
         </button>
 
-
-        {item.image_url && (
-          <img
-            src={item.image_url}
-            alt="current"
-            className="food_image"
+        <div className="modal_inset_image_container" onClick={() => fileInputRef.current.click()}>
+          <img 
+            src={imagePreview || item.image_url || "/food-placeholder.png"} 
+            alt="edit preview" 
+            className="modal_food_image" 
           />
-        )}
-        <div className="form" style={{padding:10}}>
-<input
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Food Name"
-          className="input"
-          style={{margin: 2}}
-        />
-
-        <input
-          type="text"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          placeholder="Description"
-          className="input"
-          style={{margin: 2}}
-        />
-
-        <select
-          value={vegNonveg}
-          onChange={(e) => setVegNonveg(e.target.value)}
-          className="input"
-          style={{margin: 2}}
-        >
-          <option value="veg">Veg</option>
-          <option value="non-veg">Non-Veg</option>
-        </select>
-
-        <input
-          type="number"
-          value={price}
-          onChange={(e) => setPrice(e.target.value)}
-          placeholder="Price"
-          className="input"
-          style={{margin: 2}}
-        />
-
-        <input className="input" style={{width: '175px'}}type="file" accept="image/*" onChange={handleImageChange} />
+          <div className="banner_edit_overlay" style={{background: 'rgba(0,0,0,0.4)'}}>
+            <CloudUploadRoundedIcon />
+            <p>Replace Photo</p>
+          </div>
+          <input type="file" ref={fileInputRef} style={{display:'none'}} onChange={handleImageChange} />
         </div>
 
-        
+        <div className="modal_body_content">
+          <div className="modal_header_row">
+            <div className="title_group">
+              <h3 className="modal_title_text" style={{fontSize: '24px'}}>Modify Creation</h3>
+              <p className="label_mini" style={{color: '#71717a', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '1px'}}>Item ID: #{item.food_id}</p>
+            </div>
+          </div>
 
-        <div className="actions_btns" style={{display:"flex", textAlign:"right", marginLeft:10, marginBottom: 10}}>
-          <button onClick={handleClose} className="clear_cart_btn" style={{color:"#000"}}>
-            Cancel
-          </button>
-          <button onClick={handleSave} className="checkout_btn" style={{color:"#000"}}>
-            Save
-          </button>
+          <div className="dash_form_premium" style={{marginTop: '10px'}}>
+             <div className="input_wrapper_premium">
+                <label>Dish Name</label>
+                <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="e.g. Truffle Pasta" />
+             </div>
+
+             <div className="input_wrapper_premium">
+                <label>Description</label>
+                <input type="text" value={description} onChange={e => setDescription(e.target.value)} placeholder="Short culinary description..." />
+             </div>
+
+             <div className="form_row_split">
+                <div className="input_wrapper_premium">
+                    <label>Price (₹)</label>
+                    <input type="number" value={price} onChange={e => setPrice(e.target.value)} />
+                </div>
+                <div className="input_wrapper_premium">
+                    <label>Dietary</label>
+                    <select value={vegNonveg} onChange={e => setVegNonveg(e.target.value)}>
+                        <option value="veg">Veg</option>
+                        <option value="non-veg">Non-Veg</option>
+                    </select>
+                </div>
+             </div>
+
+             <div className="modal_actions_row" style={{display: 'flex', gap: '15px', marginTop: '20px'}}>
+                <button className="btn_secondary_matte" onClick={handleClose} style={{flex: 1}}>Cancel</button>
+                <button className="modal_add_btn_premium" onClick={handleSave} disabled={loading} style={{flex: 2}}>
+                    {loading ? "Saving..." : "Save Changes"}
+                </button>
+             </div>
+          </div>
         </div>
       </div>
     </div>

@@ -1,9 +1,10 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import API from "../api/api";
-import './css/Login.css'
+import './css/Auth.css'
 import MailOutlineOutlinedIcon from '@mui/icons-material/MailOutlineOutlined';
 import LockOpenOutlinedIcon from '@mui/icons-material/LockOpenOutlined';
-import CircleRoundedIcon from '@mui/icons-material/CircleRounded';
+import toast, { Toaster } from 'react-hot-toast';
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -11,37 +12,68 @@ export default function Login() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    try {
-      const res = await API.post("/user_login", { email, password });
-      alert(res.data.message);
+    const loginPromise = API.post("/user_login", { email, password });
 
+    toast.promise(loginPromise, {
+      loading: 'Authenticating...',
+      success: (res) => <b>{res.data.message || "Welcome back!"}</b>,
+      error: (err) => <b>{err.response?.data?.message || err.message}</b>,
+    });
+
+    try {
+      const res = await loginPromise;
       if (res.data.message === "Login successful") {
-        // normal users go to home, NOT restaurant dashboard
-        window.location.href = "/";
+        setTimeout(() => { window.location.href = "/"; }, 1000);
       }
-    } catch (err) {
-      if (err.response && err.response.data) alert(err.response.data.message);
-      else alert(err.message);
-    }
+    } catch (err) { console.error(err); }
   };
 
   return (
-    <form onSubmit={handleLogin} className="login_form">
-      <div className="email_input">
-        Email Address
-        <div className="bottom">
-          <MailOutlineOutlinedIcon />  
-          <input placeholder="example@gmail.com" value={email} onChange={e => setEmail(e.target.value)} required />
+    <div className="auth_page_wrapper">
+      <Toaster position="top-right" />
+      <div className="auth_card_premium">
+        <div className="auth_header">
+          <h1 className="auth_title">LOGIN</h1>
+          <p className="auth_subtitle">Enter your credentials.</p>
+        </div>
+
+        <form onSubmit={handleLogin} className="auth_form">
+          <div className="input_group_premium">
+            <label>Email Address</label>
+            <div className="input_inner">
+              <MailOutlineOutlinedIcon className="input_icon" />
+              <input 
+                type="email" 
+                placeholder="name@example.com" 
+                value={email} 
+                onChange={e => setEmail(e.target.value)} 
+                required 
+              />
+            </div>
+          </div>
+
+          <div className="input_group_premium">
+            <label>Password</label>
+            <div className="input_inner">
+              <LockOpenOutlinedIcon className="input_icon" />
+              <input 
+                type="password" 
+                placeholder="••••••••" 
+                style={{letterSpacing:'2px', fontWeight: 'bold'}}
+                value={password} 
+                onChange={e => setPassword(e.target.value)} 
+                required 
+              />
+            </div>
+          </div>
+
+          <button type="submit" className="auth_btn_primary">Login</button>
+        </form>
+
+        <div className="auth_footer">
+          <p>New to the platform? <Link to="/register">Create Account</Link></p>
         </div>
       </div>
-      <div className="password_input">
-        Password
-        <div className="bottom">
-          <LockOpenOutlinedIcon />
-          <input placeholder="●●●●" type="password" value={password} onChange={e => setPassword(e.target.value)} required />
-        </div>
-      </div>
-      <button type="submit" className="login_processor">Login</button>
-    </form>
+    </div>
   );
 }

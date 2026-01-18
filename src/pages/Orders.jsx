@@ -1,22 +1,22 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import OrderModal from "../components/OrderModal";
-import "./index.css";
+import ShoppingCartRoundedIcon from '@mui/icons-material/ShoppingCartRounded';
+import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRounded';
 import "./css/Orders.css";
 import API from "../api/api";
+import { useNavigate } from "react-router-dom";
 
 export default function Orders() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedOrder, setSelectedOrder] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchOrders = async () => {
       try {
         const res = await API.get("/orders");
-
         setOrders(res.data);
-        console.log("DEBUG /orders response:", res.data);
       } catch (err) {
         console.error(err);
       } finally {
@@ -27,36 +27,76 @@ export default function Orders() {
   }, []);
 
   if (loading) return (
-    <div className="replace_data">
-      Loading orders...
-    </div>)
+    <div className="menu_loading">
+      <div className="spinner"></div>
+      <p>Fetching your order history...</p>
+    </div>
+  );
+
   if (orders.length === 0) return (
-      <div className="replace_data">
-        No orders placed yet!
+    <div className="">
+        <div className="empty_cart_card">
+          <div className="empty_visuals">
+            <div className="icon_circle">
+              <ShoppingCartRoundedIcon className="floating_basket" sx={{ fontSize: 60 }} />
+            </div>
+            <div className="circle_glow"></div>
+          </div>
+          
+          <h1 className="food_modal_name">Your Orders list is empty</h1>
+          <p className="empty_description">
+            Looks like you haven't made your choice yet. <br/>
+            Explore our menu and discover something delicious!
+          </p>
+          
+          <button className="final_checkout_btn" onClick={() => navigate("/")} style={{maxWidth: '250px'}}>
+            Start Exploring !!
+          </button>
+        </div>
       </div>
-    );
+  );
 
   return (
-    <div className="orders_page">
-      <h1 className="page_title">Orders</h1>
+    <div className="menu_page_wrapper">
+      <div className="menu_container">
+        
+        <header className="menu_header">
+          <h1 className="page_title_premium">My Orders</h1>
+          <p className="subtitle">Track and review your past culinary experiences</p>
+        </header>
 
-      <div className="orders_display">
-        {orders.map((order) => (
-          <div key={order.order_id} className="order_card">
-            <p>{order.restaurant_name.length > 25 
-                ? order.restaurant_name.slice(0, 25) + "..." 
-                : order.restaurant_name}</p>
-            <p>Status: <span className="font-bold">{order.order_status || "Pending"}</span></p>
-            <p>Total: ₹{order.total_price || order.total_amount}</p>
+        <div className="orders_grid_premium">
+          {orders.map((order) => {
+            const status = order.order_status?.toLowerCase() || "pending";
+            return (
+              <div key={order.order_id} className="order_card_premium">
+                <div className="order_card_header">
+                  <div className="res_info">
+                    <h2 className="res_name_small">{order.restaurant_name}</h2>
+                    <p className="order_id_tag">Order ID: #{order.order_id}</p>
+                  </div>
+                  <div className={`status_pill_premium ${status}`}>
+                    {status}
+                  </div>
+                </div>
 
-            <button
-              className="view"
-              onClick={() => setSelectedOrder(order)}
-            >
-              View Items
-            </button>
-          </div>
-        ))}
+                <div className="order_card_body">
+                  <div className="price_section">
+                    <p className="label">Total Amount</p>
+                    <p className="order_total_price">₹{order.total_price || order.total_amount}</p>
+                  </div>
+                  
+                  <button
+                    className="view_order_btn"
+                    onClick={() => setSelectedOrder(order)}
+                  >
+                    View Details <ArrowForwardIosRoundedIcon sx={{ fontSize: 14 }} />
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
 
       {selectedOrder && (

@@ -1,48 +1,248 @@
-.checkout_display{
-    display: flex;
-    justify-content: center;
+.cart_page_wrapper {
+    background-color: #f4f4f5; 
+    height: fit-content;
+    padding: 40px 20px;
+    font-family: 'Calibri', sans-serif;
 }
-.checkout_page{
-    margin-top: 150px;
-    text-align: center;
-    background-color: #232229;
+
+.cart_container {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: 30px;
+}
+
+.cart_items_section {
+    background: #fff;
+    padding: 30px;
     border-radius: 20px;
-    width: 25%;
-    color: #fff;
-    /* align */
-    padding: 0px 30px 30px 30px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
 }
-.checkout_page_title{
+
+.food_modal_name {
     font-family: "Ranille", sans-serif;
-    letter-spacing: 2px;
-    font-size: 40px;
-    font-weight: 500;
+    font-size: 32px;
+    margin-bottom: 20px;
 }
-.checkout_items{
+
+.checkout_step_card {
+    border-bottom: 1px solid #eee;
+    padding: 20px 0;
+}
+
+.step_title {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.step_num {
+    background: #20a875;
+    color: white;
+    width: 25px;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.step_title h4 {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0;
+}
+
+.step_content p {
+    color: #666;
+    font-size: 16px;
+    margin-left: 40px;
+}
+
+.qty_selector_full {
+    display: flex;
+    align-items: center;
+    color: #20a875 !important;
+    border: 1px solid #d9dadb;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.qty_step {
+    padding: 8px 12px;
+    background-color: #fff;
+    border: none;
+    color: #20a875 !important;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.qty_step:hover { background-color: #f3f1f1; }
+
+.qty_val {
+    padding: 0 10px;
+    font-weight: bolder;
+    font-size: 18px;
+}
+
+.summary_card {
+    position: sticky;
+    top: 40px;
+    background: #fff;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.summary_line {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    margin-bottom: 15px;
+    font-size: 16px;
+    color: #555;
 }
-.total{
+
+.summary_total {
     display: flex;
-    justify-content: right;
-    font-family: "Calibri", sans-serif;
+    justify-content: space-between;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 2px dashed #ddd;
+    font-weight: 800;
+    font-size: 20px;
+    color: #000;
 }
-.place{
-    display: flex;
-    justify-content: right;
-}
-.place_order{
-    padding: 15px 20px 15px 20px;
+.final_checkout_btn {
+    width: 100%;
+    margin-top: 25px;
+    padding: 18px;
+    background-color: #ff4d4f;
+    color: white;
     border: none;
-    border-radius: 10px;
-    background-color: rgb(0, 0, 0);
-    color: #fff;
-    font-weight: bold;
-    font-size: 15px;
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: bolder;
+    cursor: pointer;
+    transition: 0.3s;
+    font-family: 'Calibri', sans-serif;
+}
+
+.final_checkout_btn:hover {
+    background-color: #e03e3e;
+    transform: translateY(-2px);
+}
+
+.btn_disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.cart_item_row {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 0;
+    border-bottom: 1px solid #f9f9f9;
+}
+
+.item_name_full {
+    font-weight: 600;
+    font-size: 17px;
+    margin: 0;
+}
+
+.item_actions_row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.item_price_tag {
+    font-weight: 700;
+    width: 80px;
+    text-align: right;
+}
+
+.item_remove_icon {
+    background: none;
+    border: none;
+    color: #ccc;
     cursor: pointer;
 }
-.processing_style{
-    background-color: #161616;
-    color: #ebe9e9;
+.food_modal_price{
+    margin-top: 5px;
+}
+.item_remove_icon:hover { color: #ff4d4f; }
+.empty_checkout_card {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.empty_visuals {
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.icon_circle {
+    width: 120px;
+    height: 120px;
+    background: #16395b00;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+}
+
+.floating_basket {
+    color: #20a875; 
+    animation: basketFloat 3s ease-in-out infinite;
+    margin-top: 10px;
+}
+
+.circle_glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 140px;
+    height: 140px;
+    background: radial-gradient(circle, rgba(171, 242, 216, 0.642) 0%, transparent 70%);
+    z-index: 1;
+}
+
+/* 2. Text Styling */
+.empty_description {
+    font-family: 'Calibri', sans-serif;
+    color: #737373;
+    font-size: 18px;
+    line-height: 1.5;
+    margin-top: 3px;
+    margin-bottom: 25px;
+}
+
+/* 3. Animation */
+@keyframes basketFloat {
+    0%, 100% {
+        transform: translateY(0) rotate(0deg);
+    }
+    50% {
+        transform: translateY(-10px) rotate(-5deg);
+    }
+}
+
+.final_checkout_btn {
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.final_checkout_btn:hover {
+    transform: scale(1.05);
+    background-color: #e03e3e;
 }

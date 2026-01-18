@@ -27,7 +27,7 @@ export function CartProvider({ children }) {
         { food_id: food.food_id, quantity },
         { withCredentials: true }
       );
-      await fetchCart(); // ⬅️ Refresh the latest data from backend
+      await fetchCart(); 
     } catch (err) {
       console.log("Add to cart failed:", err);
     }
@@ -36,7 +36,7 @@ export function CartProvider({ children }) {
   const updateCart = async (food_id, quantity) => {
     try {
       await API.patch("/cart/update", { food_id, quantity }, { withCredentials: true });
-      await fetchCart(); // ⬅️ Refresh again
+      await fetchCart(); 
     } catch (err) {
       console.log("Failed to update cart", err);
     }
@@ -45,7 +45,7 @@ export function CartProvider({ children }) {
   const removeFromCart = async (food_id) => {
     try {
       await API.delete(`/cart/remove/${food_id}`, {withCredentials: true});
-      await fetchCart(); // ⬅️ Refresh again
+      await fetchCart(); 
     } catch (err) {
       console.log("Failed to remove item", err);
     }
