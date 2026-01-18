@@ -19,12 +19,12 @@ export default function RestaurantMenu({ setCartItems }) {
   useEffect(() => {
     async function fetchMenu() {
       try {
-        const menuRes = await axios.get("https://flaskapiformealmonkey.onrender.com/menu", {
+        const menuRes = await axios.get("http://127.0.0.1:5000//menu", {
           params: { restaurant_id: id, available: true },
         });
         setMenu(menuRes.data);
 
-        const restRes = await axios.get(`https://flaskapiformealmonkey.onrender.com/restaurants/${id}`);
+        const restRes = await axios.get(`http://127.0.0.1:5000//restaurants/${id}`);
         setRestaurant(restRes.data);
       } catch (err) {
         console.error(err);

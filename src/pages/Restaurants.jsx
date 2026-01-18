@@ -13,7 +13,7 @@ export default function Restaurants() {
   useEffect(() => {
     async function fetchRestaurants() {
       try {
-        const res = await axios.get("https://flaskapiformealmonkey.onrender.com/restaurants");
+        const res = await axios.get("http://127.0.0.1:5000//restaurants");
         setRestaurants(res.data);
       } catch (err) {
         console.error(err);

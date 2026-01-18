@@ -2,7 +2,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "https://flaskapiformealmonkey.onrender.com",
+  baseURL: "http://127.0.0.1:5000/",
   withCredentials: true, // <--- important!
 });
 

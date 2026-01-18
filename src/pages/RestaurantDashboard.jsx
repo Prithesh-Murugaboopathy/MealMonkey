@@ -13,6 +13,7 @@ import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownR
 
 import API from "../api/api";
 import "./css/RestDashboard.css";
+import toast, { Toaster } from "react-hot-toast";
 
 // --- CUSTOM DROPDOWN COMPONENT (Premium Style) ---
 const PremiumSelect = ({ value, options, onChange, placeholder }) => {
@@ -135,9 +136,30 @@ export default function RestaurantDashboard({ setCartItems }) {
       setMenu(prev => prev.filter(item => item.food_id !== id));
     } catch { alert("Delete failed"); }
   };
+  const handleBannerUpload = async (file) => {
+  const formData = new FormData();
+  formData.append("image", file);
+
+  toast.promise(
+    API.post("/upload_restaurant_image", formData, {
+      headers: { "Content-Type": "multipart/form-data" }
+    }),
+    {
+      loading: 'Uploading new banner...',
+      success: (res) => {
+        setRestaurantImagePreview(res.data.url);
+        return <b>Banner updated!</b>;
+      },
+      error: (err) => {
+        return <b>{err.response?.data?.message || "Upload failed"}</b>;
+      },
+    }
+  );
+};
 
   return (
     <div className="dash_container">
+      <Toaster />
       <header className="dash_header">
         <h1 className="serif_title">Restaurant Panel</h1>
         <p className="sub_text">Manage your store status and kitchen menu</p>
@@ -146,13 +168,24 @@ export default function RestaurantDashboard({ setCartItems }) {
       <div className="dash_hero_section">
         <div className="banner_wrapper">
           <img src={restaurantImagePreview} alt="Banner" className="hero_banner_img" />
+
           <button className="change_banner_overlay" onClick={() => fileInputRef.current.click()}>
             <CameraAltIcon /> Update Banner
           </button>
-          <input type="file" ref={fileInputRef} hidden onChange={(e) => {
-            const file = e.target.files[0];
-            if(file) setRestaurantImagePreview(URL.createObjectURL(file));
-          }} />
+
+          <input 
+            type="file" 
+            ref={fileInputRef} 
+            hidden 
+            accept="image/*"
+            onChange={(e) => {
+              const file = e.target.files[0];
+              if (file) {
+                setRestaurantImagePreview(URL.createObjectURL(file));
+                handleBannerUpload(file); 
+              }
+            }} 
+          />
         </div>
 
         <div className="quick_actions_bar">
@@ -182,7 +215,7 @@ export default function RestaurantDashboard({ setCartItems }) {
                 <h2 className="card_heading"><AddCircleOutlineIcon /> Add New Dish</h2>
                 <form onSubmit={handleAddFood} className="dash_form">
                     <input type="text" placeholder="Dish Name" value={name} onChange={e => setName(e.target.value)} required />
-                    <textarea placeholder="Description" value={description} onChange={e => setDescription(e.target.value)} />
+                    <textarea placeholder="Description" style={{resize: "vertical", maxHeight: "147px"}} value={description} onChange={e => setDescription(e.target.value)} />
                     <div className="form_row">
                         <input type="number" placeholder="Price" value={price} onChange={e => setPrice(e.target.value)} required />
                         <select value={vegNonveg} onChange={e => setVegNonveg(e.target.value)}>
