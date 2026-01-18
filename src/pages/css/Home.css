@@ -26,9 +26,10 @@
 }
 
 .live_ping {
-  width: 8px; height: 8px; background: #20a875; border-radius: 50%;
+  background: #20a875; border-radius: 50%;
   box-shadow: 0 0 10px #20a875;
   animation: ping 1.5s infinite;
+  padding: 5px;
 }
 
 @keyframes ping {
